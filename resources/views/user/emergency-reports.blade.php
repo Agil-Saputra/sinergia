@@ -1,156 +1,159 @@
 @extends('layouts.mobile')
 
-@section('title', 'Emergency Reports - Sinergia')
-@section('header', 'Emergency Reports')
+@section('title', 'Laporan Isu & Permintaan - Sinergia')
+@section('header', 'Laporan Isu & Permintaan')
 
 @section('content')
 <div class="p-4 space-y-6">
-    <!-- Emergency Report Form -->
-    <div class="bg-red-50 border-2 border-red-300 rounded-xl p-6">
-        <!-- Header with clear instruction -->
+    <!-- Formulir Laporan Isu & Permintaan -->
+    <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-6">
+        <!-- Header dengan instruksi yang jelas -->
         <div class="text-center mb-6">
-            <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+            <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                <i class="fas fa-tools text-white text-2xl"></i>
             </div>
-            <h2 class="text-xl font-bold text-red-800 mb-2">Report Emergency</h2>
-            <p class="text-sm text-red-700">Fill in the information below to report an emergency</p>
+            <h2 class="text-xl font-bold text-blue-800 mb-2">Lapor Isu atau Permintaan</h2>
+            <p class="text-sm text-blue-700">Isi formulir untuk melaporkan masalah atau permintaan perbaikan.</p>
         </div>
-        
+
         <form method="POST" action="{{ route('user.emergency-reports.store') }}" class="space-y-6">
             @csrf
-            
-            <!-- Step 1: What happened? -->
+
+            <!-- Langkah 1: Apa masalahnya? -->
             <div class="bg-white rounded-lg p-4 border-2 border-gray-200">
                 <div class="flex items-center mb-3">
                     <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</div>
-                    <label for="title" class="text-lg font-semibold text-gray-800">What happened?</label>
+                    <label for="title" class="text-lg font-semibold text-gray-800">Apa masalahnya?</label>
                 </div>
-                <input 
-                    type="text" 
-                    id="title" 
-                    name="title" 
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
                     value="{{ old('title') }}"
-                    required 
-                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
-                    placeholder="Example: Fire in kitchen, Someone is hurt, Power is out"
+                    required
+                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Contoh: AC tidak dingin, Lampu mati, Keran bocor"
                 >
                 @error('title')
                     <p class="text-red-600 text-sm mt-2 font-medium">{{ $message }}</p>
                 @enderror
             </div>
 
-            <!-- Step 2: Tell us more -->
+            <!-- Langkah 2: Deskripsi dan Lokasi -->
             <div class="bg-white rounded-lg p-4 border-2 border-gray-200">
                 <div class="flex items-center mb-3">
                     <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</div>
-                    <label for="description" class="text-lg font-semibold text-gray-800">Tell us more details</label>
+                    <label for="description" class="text-lg font-semibold text-gray-800">Deskripsi Detail</label>
                 </div>
-                <textarea 
-                    id="description" 
-                    name="description" 
-                    rows="4" 
-                    required 
-                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
-                    placeholder="Example: There is smoke coming from the kitchen. I can smell burning. The fire alarm is beeping."
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="4"
+                    required
+                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Contoh: AC di ruang meeting B tidak dingin sejak pagi. Lantai lobi utama kotor."
                 >{{ old('description') }}</textarea>
                 @error('description')
                     <p class="text-red-600 text-sm mt-2 font-medium">{{ $message }}</p>
                 @enderror
             </div>
 
-            <!-- Step 3: How serious is it? -->
+            <!-- Langkah 3: Tingkat Urgensi -->
             <div class="bg-white rounded-lg p-4 border-2 border-gray-200">
                 <div class="flex items-center mb-4">
                     <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</div>
-                    <label class="text-lg font-semibold text-gray-800">How serious is it?</label>
+                    <label class="text-lg font-semibold text-gray-800">Tingkat Urgensi</label>
                 </div>
                 <div class="space-y-3">
                     <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 priority-option">
-                        <input type="radio" name="priority" value="critical" class="w-5 h-5 mr-4 text-red-600" {{ old('priority') == 'critical' ? 'checked' : '' }}>
+                        <input type="radio" name="priority" value="high" class="w-5 h-5 mr-4 text-red-600" {{ old('priority') == 'high' ? 'checked' : '' }}>
                         <div class="flex items-center">
                             <div class="w-4 h-4 bg-red-600 rounded-full mr-3"></div>
                             <div>
-                                <div class="font-semibold text-red-800">VERY SERIOUS</div>
-                                <div class="text-sm text-gray-600">Someone could get hurt or die</div>
+                                <div class="font-semibold text-red-800">Tinggi</div>
+                                <div class="text-sm text-gray-600">Mengganggu operasional atau berisiko bahaya</div>
                             </div>
                         </div>
                     </label>
-                    
+
                     <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 priority-option">
-                        <input type="radio" name="priority" value="high" class="w-5 h-5 mr-4 text-orange-600" {{ old('priority') == 'high' ? 'checked' : '' }}>
+                        <input type="radio" name="priority" value="medium" class="w-5 h-5 mr-4 text-orange-600" {{ old('priority', 'medium') == 'medium' ? 'checked' : '' }}>
                         <div class="flex items-center">
                             <div class="w-4 h-4 bg-orange-500 rounded-full mr-3"></div>
                             <div>
-                                <div class="font-semibold text-orange-800">SERIOUS</div>
-                                <div class="text-sm text-gray-600">Needs quick help</div>
+                                <div class="font-semibold text-orange-800">Sedang</div>
+                                <div class="text-sm text-gray-600">Perlu ditangani segera namun tidak darurat</div>
                             </div>
                         </div>
                     </label>
-                    
+
                     <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 priority-option">
-                        <input type="radio" name="priority" value="medium" class="w-5 h-5 mr-4 text-yellow-600" {{ old('priority', 'medium') == 'medium' ? 'checked' : '' }}>
+                        <input type="radio" name="priority" value="low" class="w-5 h-5 mr-4 text-yellow-600" {{ old('priority') == 'low' ? 'checked' : '' }}>
                         <div class="flex items-center">
                             <div class="w-4 h-4 bg-yellow-500 rounded-full mr-3"></div>
                             <div>
-                                <div class="font-semibold text-yellow-800">NORMAL</div>
-                                <div class="text-sm text-gray-600">Needs help but not urgent</div>
+                                <div class="font-semibold text-yellow-800">Rendah</div>
+                                <div class="text-sm text-gray-600">Bisa dijadwalkan untuk perbaikan rutin</div>
                             </div>
                         </div>
                     </label>
                 </div>
             </div>
 
-            <!-- Step 4: Where is it? (Optional) -->
+            <!-- Langkah 4: Di mana lokasinya? (Opsional) -->
             <div class="bg-white rounded-lg p-4 border-2 border-gray-200">
                 <div class="flex items-center mb-3">
                     <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">4</div>
-                    <label for="location" class="text-lg font-semibold text-gray-800">Where is it? <span class="text-sm text-gray-500">(Optional)</span></label>
+                    <label for="location" class="text-lg font-semibold text-gray-800">Lokasi Spesifik <span class="text-sm text-gray-500">(Opsional)</span></label>
                 </div>
-                <input 
-                    type="text" 
-                    id="location" 
-                    name="location" 
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
                     value="{{ old('location') }}"
-                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-red-500"
-                    placeholder="Example: Building A, 2nd floor, Room 201"
+                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Contoh: Gedung A, Lantai 2, Ruang 201"
                 >
             </div>
 
-            <!-- Submit Button -->
+            <!-- Tombol Kirim -->
             <div class="pt-4">
-                <button type="submit" class="w-full bg-red-600 text-white py-4 px-6 rounded-xl text-xl font-bold hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 shadow-lg">
+                <button type="submit" class="w-full bg-blue-600 text-white py-4 px-6 rounded-xl text-xl font-bold hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg">
                     <i class="fas fa-paper-plane mr-3"></i>
-                    SEND EMERGENCY REPORT
+                    KIRIM LAPORAN
                 </button>
                 <p class="text-center text-sm text-gray-600 mt-3">
-                    <i class="fas fa-clock mr-1"></i>
-                    We will respond as quickly as possible
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Laporan akan diteruskan ke tim terkait.
                 </p>
             </div>
         </form>
     </div>
 
-    <!-- Simple History Section -->
+    <!-- Bagian Riwayat Laporan -->
     <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-gray-800">My Reports</h3>
+            <h3 class="text-lg font-bold text-gray-800">Riwayat Laporan Saya</h3>
             <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{{ $reports->count() }} Total</span>
         </div>
 
-        <!-- Simple Filter Buttons -->
+        <!-- Tombol Filter -->
         <div class="flex space-x-2 mb-4">
-            <button class="flex-1 py-2 px-3 bg-blue-600 text-white rounded-lg text-sm font-medium filter-btn" data-status="all">
-                All Reports
+            <button class="flex-1 py-2 px-3 bg-blue-600 text-white rounded-lg text-sm font-medium filter-btn active" data-status="all">
+                Semua
             </button>
             <button class="flex-1 py-2 px-3 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium filter-btn" data-status="pending">
-                Waiting
+                Baru
+            </button>
+            <button class="flex-1 py-2 px-3 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium filter-btn" data-status="under_review">
+                Dikerjakan
             </button>
             <button class="flex-1 py-2 px-3 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium filter-btn" data-status="resolved">
-                Finished
+                Selesai
             </button>
         </div>
 
-        <!-- Reports List -->
+        <!-- Daftar Laporan -->
         <div class="space-y-3" id="reports-list">
             @forelse($reports as $report)
                 <div class="border-2 border-gray-200 rounded-lg p-4 report-item" data-status="{{ $report->status }}">
@@ -163,56 +166,56 @@
                             <i class="fas fa-chevron-down text-lg" id="chevron-{{ $report->id }}"></i>
                         </button>
                     </div>
-                    
+
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             @if($report->status == 'pending')
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                                    <i class="fas fa-clock mr-1"></i> Waiting
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                    <i class="fas fa-flag mr-1"></i> Baru
                                 </span>
                             @elseif($report->status == 'under_review')
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                                    <i class="fas fa-eye mr-1"></i> Being Reviewed
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                    <i class="fas fa-wrench mr-1"></i> Dikerjakan
                                 </span>
                             @elseif($report->status == 'resolved')
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                    <i class="fas fa-check mr-1"></i> Finished
+                                    <i class="fas fa-check-circle mr-1"></i> Selesai
                                 </span>
                             @else
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-                                    <i class="fas fa-times mr-1"></i> Closed
+                                    <i class="fas fa-times-circle mr-1"></i> Ditutup
                                 </span>
                             @endif
                         </div>
-                        <span class="text-sm text-gray-500">{{ $report->reported_at->format('M d, Y') }}</span>
+                        <span class="text-sm text-gray-500">{{ $report->reported_at->format('d M Y') }}</span>
                     </div>
-                    
-                    <!-- Expandable Details -->
+
+                    <!-- Detail yang Dapat Diperluas -->
                     <div class="hidden mt-4 pt-4 border-t-2 border-gray-100" id="details-{{ $report->id }}">
                         <div class="space-y-3">
                             <div>
-                                <p class="font-semibold text-gray-700 mb-1">Full Details:</p>
+                                <p class="font-semibold text-gray-700 mb-1">Detail Lengkap:</p>
                                 <p class="text-gray-600 leading-relaxed">{{ $report->description }}</p>
                             </div>
-                            
+
                             @if($report->location)
                                 <div>
-                                    <p class="font-semibold text-gray-700 mb-1">Location:</p>
+                                    <p class="font-semibold text-gray-700 mb-1">Lokasi:</p>
                                     <p class="text-gray-600">{{ $report->location }}</p>
                                 </div>
                             @endif
-                            
+
                             @if($report->admin_notes)
                                 <div class="bg-blue-50 p-3 rounded-lg">
-                                    <p class="font-semibold text-blue-800 mb-1">Response from Admin:</p>
+                                    <p class="font-semibold text-blue-800 mb-1">Tanggapan dari Admin:</p>
                                     <p class="text-blue-700">{{ $report->admin_notes }}</p>
                                 </div>
                             @endif
-                            
+
                             @if($report->resolved_at)
                                 <div>
-                                    <p class="font-semibold text-gray-700 mb-1">Completed on:</p>
-                                    <p class="text-gray-600">{{ $report->resolved_at->format('M d, Y \a\t H:i') }}</p>
+                                    <p class="font-semibold text-gray-700 mb-1">Selesai pada:</p>
+                                    <p class="text-gray-600">{{ $report->resolved_at->format('d M Y \p\u\k\u\l H:i') }}</p>
                                 </div>
                             @endif
                         </div>
@@ -221,8 +224,8 @@
             @empty
                 <div class="text-center py-8">
                     <i class="fas fa-clipboard-list text-gray-400 text-4xl mb-4"></i>
-                    <p class="text-gray-600 text-lg font-medium mb-2">No reports yet</p>
-                    <p class="text-gray-500">When you submit a report, it will appear here</p>
+                    <p class="text-gray-600 text-lg font-medium mb-2">Belum ada laporan</p>
+                    <p class="text-gray-500">Saat Anda mengirim laporan, laporan itu akan muncul di sini</p>
                 </div>
             @endforelse
         </div>
@@ -230,7 +233,7 @@
 </div>
 
 <style>
-/* Enhanced styles for better usability */
+/* Gaya yang disempurnakan untuk usabilitas yang lebih baik */
 .priority-option:has(input:checked) {
     background-color: #f3f4f6;
     border-color: #3b82f6;
@@ -243,6 +246,7 @@
 .filter-btn.active {
     background-color: #2563eb !important;
     color: white !important;
+    font-weight: 600;
 }
 
 .filter-btn:not(.active) {
@@ -252,69 +256,68 @@
 </style>
 
 <script>
-// Toggle report details with enhanced feedback
+// Tampilkan/sembunyikan detail laporan dengan umpan balik yang disempurnakan
 function toggleReportDetails(reportId) {
     const details = document.getElementById(`details-${reportId}`);
     const chevron = document.getElementById(`chevron-${reportId}`);
-    
+
     if (details.classList.contains('hidden')) {
         details.classList.remove('hidden');
         chevron.classList.remove('fa-chevron-down');
         chevron.classList.add('fa-chevron-up');
-        chevron.parentElement.style.backgroundColor = '#f3f4f6';
+        chevron.closest('.report-item').classList.add('border-blue-500');
     } else {
         details.classList.add('hidden');
         chevron.classList.remove('fa-chevron-up');
         chevron.classList.add('fa-chevron-down');
-        chevron.parentElement.style.backgroundColor = '';
+         chevron.closest('.report-item').classList.remove('border-blue-500');
     }
 }
 
-// Simplified filter functionality
+// Fungsionalitas filter yang disederhanakan
 document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const reportItems = document.querySelectorAll('.report-item');
-    
+
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
             const status = this.dataset.status;
-            
-            // Update active button
+
+            // Perbarui tombol aktif
             filterButtons.forEach(btn => {
-                btn.classList.remove('active');
-                btn.style.backgroundColor = '#e5e7eb';
-                btn.style.color = '#374151';
+                btn.classList.remove('active', 'bg-blue-600', 'text-white', 'font-semibold');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
             });
-            
-            this.classList.add('active');
-            this.style.backgroundColor = '#2563eb';
-            this.style.color = 'white';
-            
-            // Filter reports
+
+            this.classList.add('active', 'bg-blue-600', 'text-white', 'font-semibold');
+            this.classList.remove('bg-gray-200', 'text-gray-700');
+
+            // Filter laporan
+            let visibleCount = 0;
             reportItems.forEach(item => {
                 if (status === 'all' || item.dataset.status === status) {
                     item.style.display = 'block';
+                    visibleCount++;
                 } else {
                     item.style.display = 'none';
                 }
             });
+
+            // Tampilkan pesan jika tidak ada laporan yang cocok
+            const emptyState = document.querySelector('#reports-list .text-center');
+            if(emptyState && visibleCount === 0) {
+                 // Anda bisa menambahkan logika untuk menampilkan pesan "Tidak ada laporan untuk filter ini"
+            }
         });
     });
-    
-    // Auto-select priority radio buttons when clicked anywhere on the label
+
+    // Pilih otomatis tombol radio prioritas saat diklik di mana saja pada label
     document.querySelectorAll('.priority-option').forEach(label => {
         label.addEventListener('click', function() {
             const radio = this.querySelector('input[type="radio"]');
-            radio.checked = true;
-            
-            // Update visual feedback
-            document.querySelectorAll('.priority-option').forEach(opt => {
-                opt.style.backgroundColor = '';
-                opt.style.borderColor = '#d1d5db';
-            });
-            
-            this.style.backgroundColor = '#f3f4f6';
-            this.style.borderColor = '#3b82f6';
+            if (radio) {
+                radio.checked = true;
+            }
         });
     });
 });
