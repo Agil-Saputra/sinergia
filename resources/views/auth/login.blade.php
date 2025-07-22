@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Masuk - Sinergia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,8 +54,11 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login') }}" class="space-y-4">
+                <form method="POST" action="{{ route('login') }}" class="space-y-4" id="loginForm">
                     @csrf
+                    
+                    <!-- Hidden field to track form freshness -->
+                    <input type="hidden" name="form_timestamp" value="{{ time() }}">
 
                     <!-- Kolom Kode Karyawan -->
                     <div>
@@ -124,12 +128,54 @@
         // Auto submit form when employee code is complete (8 characters)
         document.getElementById('employee_code').addEventListener('input', function(e) {
             if (e.target.value.length === 8) {
-                // Small delay to allow user to see the complete code
+                // Small delay to allow user to see the complete code and ensure CSRF token is ready
                 setTimeout(() => {
-                    document.querySelector('form').submit();
-                }, 500);
+                    // Re-check if form still has valid CSRF token
+                    const form = document.querySelector('form');
+                    const csrfToken = form.querySelector('input[name="_token"]');
+                    
+                    if (csrfToken && csrfToken.value) {
+                        form.submit();
+                    } else {
+                        // If CSRF token is missing, reload page
+                        location.reload();
+                    }
+                }, 800); // Increased delay
             }
         });
+
+        // Prevent multiple form submissions
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'MASUK...';
+        });
+
+        // Refresh CSRF token every 10 minutes to prevent expiration
+        setInterval(function() {
+            fetch('/login', {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newToken = doc.querySelector('meta[name="csrf-token"]');
+                const currentTokenMeta = document.querySelector('meta[name="csrf-token"]');
+                const currentTokenInput = document.querySelector('input[name="_token"]');
+                
+                if (newToken && currentTokenMeta && currentTokenInput) {
+                    currentTokenMeta.content = newToken.content;
+                    currentTokenInput.value = newToken.content;
+                }
+            })
+            .catch(error => {
+                console.log('Token refresh failed:', error);
+            });
+        }, 600000); // 10 minutes
     </script>
 </body>
 </html>

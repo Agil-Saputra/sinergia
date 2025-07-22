@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\Task;
+use App\Models\EmergencyReport;
 use Carbon\Carbon;
 
 class AuthController extends Controller
@@ -33,6 +35,8 @@ class AuthController extends Controller
 
         if ($user) {
             Auth::login($user, $request->filled('remember'));
+            
+            // Regenerate session to prevent session fixation
             $request->session()->regenerate();
             
             // Auto check-in for regular users
@@ -102,7 +106,42 @@ class AuthController extends Controller
             return redirect('/login')->with('error', 'Access denied. Admin only.');
         }
         
-        return view('admin.dashboard');
+        // Get today's attendance data
+        $todayAttendance = Attendance::with('user')
+            ->whereDate('date', today())
+            ->orderBy('check_in', 'desc')
+            ->get();
+
+        // Get statistics
+        $totalEmployees = User::where('role', 'user')->count();
+        $todayPresent = $todayAttendance->count();
+        $totalTasks = \App\Models\Task::count();
+        $completedTasks = \App\Models\Task::where('status', 'completed')->count();
+        $pendingTasks = \App\Models\Task::where('status', '!=', 'completed')->count();
+        $emergencyReports = \App\Models\EmergencyReport::whereDate('created_at', today())->count();
+
+        // Get recent activities
+        $recentTasks = \App\Models\Task::with(['user', 'assignedBy'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        $recentReports = \App\Models\EmergencyReport::with('user')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        
+        return view('admin.dashboard', compact(
+            'todayAttendance',
+            'totalEmployees',
+            'todayPresent',
+            'totalTasks',
+            'completedTasks',
+            'pendingTasks',
+            'emergencyReports',
+            'recentTasks',
+            'recentReports'
+        ));
     }
 
     /**

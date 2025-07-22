@@ -15,19 +15,35 @@ class Task extends Model
         'priority',
         'status',
         'category',
+        'task_type',
+        'approval_status',
+        'approved_by',
+        'approved_at',
+        'rejection_reason',
+        'is_self_assigned',
         'estimated_time',
         'assigned_date',
+        'due_date',
+        'notes',
         'started_at',
         'completed_at',
         'completion_notes',
-        'proof_image'
+        'proof_image',
+        'admin_feedback',
+        'feedback_type',
+        'feedback_by',
+        'feedback_at'
     ];
 
     protected $casts = [
         'assigned_date' => 'date',
+        'due_date' => 'date',
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
-        'estimated_time' => 'decimal:1'
+        'feedback_at' => 'datetime',
+        'approved_at' => 'datetime',
+        'estimated_time' => 'decimal:1',
+        'is_self_assigned' => 'boolean'
     ];
 
     public function user(): BelongsTo
@@ -38,6 +54,16 @@ class Task extends Model
     public function assignedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_by');
+    }
+
+    public function feedbackBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'feedback_by');
+    }
+
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
     public function getPriorityColorAttribute(): string
@@ -67,6 +93,64 @@ class Task extends Model
             'in_progress' => '⚡ Sedang Dikerjakan',
             'completed' => '✅ Selesai',
             default => 'Unknown'
+        };
+    }
+
+    public function getFeedbackTypeColorAttribute(): string
+    {
+        return match($this->feedback_type) {
+            'excellent' => 'bg-green-100 text-green-800',
+            'good' => 'bg-blue-100 text-blue-800',
+            'needs_improvement' => 'bg-yellow-100 text-yellow-800',
+            default => 'bg-gray-100 text-gray-800'
+        };
+    }
+
+    public function getFeedbackTypeTextAttribute(): string
+    {
+        return match($this->feedback_type) {
+            'excellent' => '⭐ Sempurna',
+            'good' => '👍 Bagus',
+            'needs_improvement' => '📝 Perlu Perbaikan',
+            default => ''
+        };
+    }
+
+    public function getTaskTypeTextAttribute(): string
+    {
+        return match($this->task_type) {
+            'routine' => '🔄 Rutin',
+            'incidental' => '⚡ Insidental',
+            default => 'Unknown'
+        };
+    }
+
+    public function getTaskTypeColorAttribute(): string
+    {
+        return match($this->task_type) {
+            'routine' => 'bg-blue-100 text-blue-800',
+            'incidental' => 'bg-purple-100 text-purple-800',
+            default => 'bg-gray-100 text-gray-800'
+        };
+    }
+
+    public function getApprovalStatusTextAttribute(): string
+    {
+        return match($this->approval_status) {
+            'pending' => '⏳ Menunggu Persetujuan',
+            'approved' => '✅ Disetujui',
+            'rejected' => '❌ Ditolak',
+            default => ''
+        };
+    }
+
+    public function getApprovalStatusColorAttribute(): string
+    {
+        return match($this->approval_status) {
+            'pending' => 'bg-yellow-100 text-yellow-800',
+            'approved' => 'bg-green-100 text-green-800',
+            'rejected' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800'
         };
     }
 

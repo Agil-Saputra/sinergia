@@ -43,8 +43,9 @@ class Attendance extends Model
             return null;
         }
 
-        $checkIn = Carbon::parse($this->check_in);
-        $checkOut = Carbon::parse($this->check_out);
+        // Parse times in Jakarta timezone
+        $checkIn = Carbon::parse($this->check_in)->setTimezone('Asia/Jakarta');
+        $checkOut = Carbon::parse($this->check_out)->setTimezone('Asia/Jakarta');
         
         return $checkOut->diffInHours($checkIn, true);
     }
@@ -58,8 +59,8 @@ class Attendance extends Model
             return false;
         }
 
-        $standardCheckIn = Carbon::parse('08:00');
-        $actualCheckIn = Carbon::parse($this->check_in);
+        $standardCheckIn = Carbon::parse('08:00')->setTimezone('Asia/Jakarta');
+        $actualCheckIn = Carbon::parse($this->check_in)->setTimezone('Asia/Jakarta');
         
         return $actualCheckIn->gt($standardCheckIn);
     }
@@ -73,8 +74,8 @@ class Attendance extends Model
             return false;
         }
 
-        $standardCheckOut = Carbon::parse('17:00');
-        $actualCheckOut = Carbon::parse($this->check_out);
+        $standardCheckOut = Carbon::parse('17:00')->setTimezone('Asia/Jakarta');
+        $actualCheckOut = Carbon::parse($this->check_out)->setTimezone('Asia/Jakarta');
         
         return $actualCheckOut->lt($standardCheckOut);
     }

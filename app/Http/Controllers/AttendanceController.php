@@ -59,7 +59,7 @@ class AttendanceController extends Controller
             return redirect()->back()->with('error', 'Anda sudah melakukan check-in hari ini!');
         }
         
-        $checkInTime = now()->format('H:i:s');
+        $checkInTime = now()->setTimezone('Asia/Jakarta')->format('H:i:s');
         $status = 'present';
         
         // Check if late (after 8:00 AM)
@@ -111,7 +111,7 @@ class AttendanceController extends Controller
             return redirect()->back()->with('error', 'Anda sudah melakukan check-out hari ini!');
         }
         
-        $checkOutTime = now()->format('H:i:s');
+        $checkOutTime = now()->setTimezone('Asia/Jakarta')->format('H:i:s');
         $status = $attendance->status;
         
         // Check if early leave (before 5:00 PM)

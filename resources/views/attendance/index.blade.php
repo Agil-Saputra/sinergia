@@ -10,6 +10,7 @@
     <div class="text-center mb-6">
         <div class="text-2xl font-bold text-gray-800 font-mono" id="currentTime"></div>
         <p class="text-gray-600 mt-1 text-sm" id="currentDate"></p>
+        <p class="text-xs text-gray-500 mt-1">Server Time: {{ now()->setTimezone('Asia/Jakarta')->format('H:i:s d/m/Y') }}</p>
     </div>
 
     <!-- Today's Attendance Status -->
@@ -162,13 +163,18 @@
 <script>
     function updateClock() {
         const now = new Date();
-        const timeString = now.toLocaleTimeString('id-ID', {
+        
+        // Get Jakarta time specifically
+        const jakartaTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
+        
+        const timeString = jakartaTime.toLocaleTimeString('id-ID', {
             hour12: false,
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit'
         });
-        const dateString = now.toLocaleDateString('id-ID', {
+        
+        const dateString = jakartaTime.toLocaleDateString('id-ID', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',

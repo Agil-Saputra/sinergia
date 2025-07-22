@@ -25,6 +25,11 @@ class TaskController extends Controller
             $query->where('status', $request->status);
         }
         
+        // Filter berdasarkan tipe task
+        if ($request->has('type') && $request->type !== 'all') {
+            $query->where('task_type', $request->type);
+        }
+        
         // Prioritaskan task hari ini
         $tasks = $query->orderByRaw("CASE WHEN assigned_date = CURDATE() THEN 0 ELSE 1 END")
                       ->orderBy('priority', 'desc')
@@ -55,23 +60,33 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'priority' => 'required|in:low,medium,high',
+            'task_type' => 'required|in:routine,incidental',
             'assigned_date' => 'required|date|after_or_equal:today',
             'category' => 'nullable|string',
             'estimated_time' => 'nullable|numeric|min:0.5|max:100'
         ]);
 
-        Task::create([
+        $task = Task::create([
             'user_id' => Auth::id(),
-            'assigned_by' => Auth::id(), // user bisa assign sendiri task
+            'assigned_by' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
             'priority' => $request->priority,
+            'task_type' => $request->task_type,
             'assigned_date' => $request->assigned_date,
             'category' => $request->category,
             'estimated_time' => $request->estimated_time,
+            'is_self_assigned' => true,
+            // Task insidental butuh approval, task routine langsung approved
+            'approval_status' => $request->task_type === 'incidental' ? 'pending' : 'approved',
+            'status' => $request->task_type === 'incidental' ? 'assigned' : 'assigned'
         ]);
         
-        return redirect()->route('user.tasks')->with('success', 'Tugas berhasil dibuat!');
+        $message = $request->task_type === 'incidental' 
+            ? 'Tugas insidental berhasil dibuat! Menunggu persetujuan supervisor.' 
+            : 'Tugas berhasil dibuat!';
+            
+        return redirect()->route('user.tasks')->with('success', $message);
     }
 
     /**
