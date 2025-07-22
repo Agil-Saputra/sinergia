@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'employee_code',
         'email',
         'password',
         'role',
@@ -61,5 +62,37 @@ class User extends Authenticatable
     public function isUser(): bool
     {
         return $this->role === 'user';
+    }
+
+    /**
+     * Get emergency reports for this user
+     */
+    public function emergencyReports()
+    {
+        return $this->hasMany(EmergencyReport::class);
+    }
+
+    /**
+     * Get attendances for this user
+     */
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    /**
+     * Get tasks for this user
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    /**
+     * Get today's attendance
+     */
+    public function todayAttendance()
+    {
+        return $this->attendances()->whereDate('date', today());
     }
 }

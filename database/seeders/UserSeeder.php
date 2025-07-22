@@ -16,32 +16,51 @@ class UserSeeder extends Seeder
     {
         // Create Admin User
         User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password123'),
+            'name' => 'Administrator',
+            'employee_code' => 'SBY00001',
+            'email' => 'admin@sinergia.com',
+            'password' => null,
             'role' => 'admin',
         ]);
 
-        // Create Regular User
+        // Create Cleaning Staff Users
         User::create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'password' => Hash::make('password123'),
+            'name' => 'Budi Santoso',
+            'employee_code' => 'SBY09876',
+            'email' => null,
+            'password' => null,
             'role' => 'user',
         ]);
 
-        // Create additional test users
         User::create([
-            'name' => 'John Admin',
-            'email' => 'john.admin@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'admin',
+            'name' => 'Sari Dewi',
+            'employee_code' => 'SBY09877',
+            'email' => null,
+            'password' => null,
+            'role' => 'user',
         ]);
 
         User::create([
-            'name' => 'Jane User',
-            'email' => 'jane.user@example.com',
-            'password' => Hash::make('password123'),
+            'name' => 'Ahmad Rizki',
+            'employee_code' => 'SBY09878',
+            'email' => null,
+            'password' => null,
+            'role' => 'user',
+        ]);
+
+        User::create([
+            'name' => 'Indah Permata',
+            'employee_code' => 'SBY09879',
+            'email' => null,
+            'password' => null,
+            'role' => 'user',
+        ]);
+
+        User::create([
+            'name' => 'Joko Susilo',
+            'employee_code' => 'SBY09880',
+            'email' => null,
+            'password' => null,
             'role' => 'user',
         ]);
     }
