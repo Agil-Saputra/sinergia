@@ -16,6 +16,11 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/check-password-required', [AuthController::class, 'checkPasswordRequired']);
+
+// Forgot Password Routes
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+Route::post('/forgot-password', [AuthController::class, 'sendPasswordViaWhatsApp'])->name('forgot-password.send');
 
 // Admin Routes
 Route::middleware(['role:admin'])->group(function () {

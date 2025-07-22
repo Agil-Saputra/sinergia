@@ -37,35 +37,35 @@
                         <a href="{{ route('admin.users.index') }}" 
                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg {{ request()->routeIs('admin.users.*') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
                             <i class="fas fa-users mr-3 flex-shrink-0 h-5 w-5"></i>
-                            Users Management
+                            Kelola Pengguna
                         </a>
 
                         <!-- Task Management -->
                         <a href="{{ route('admin.tasks.index') }}" 
                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg {{ request()->routeIs('admin.tasks.*') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
                             <i class="fas fa-tasks mr-3 flex-shrink-0 h-5 w-5"></i>
-                            Manage Tasks
+                            Kelola Tugas
                         </a>
 
                         <!-- Employee Attendance -->
                         <a href="{{ route('admin.attendance.index') }}" 
                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg {{ request()->routeIs('admin.attendance.*') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
                             <i class="fas fa-clock mr-3 flex-shrink-0 h-5 w-5"></i>
-                            Employee Attendance
+                            Absensi Karyawan
                         </a>
 
                         <!-- Reports -->
                         <a href="{{ route('admin.reports.index') }}" 
                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg {{ request()->routeIs('admin.reports.*') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
                             <i class="fas fa-chart-bar mr-3 flex-shrink-0 h-5 w-5"></i>
-                            Reports
+                            Laporan
                         </a>
 
                         <!-- Emergency Reports -->
                         <a href="{{ route('admin.emergency-reports.index') }}" 
                            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg {{ request()->routeIs('admin.emergency-reports.*') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900' }}">
                             <i class="fas fa-exclamation-triangle mr-3 flex-shrink-0 h-5 w-5"></i>
-                            Emergency Reports
+                            Laporan Darurat
                         </a>
                     </nav>
 
@@ -87,7 +87,7 @@
                                 @csrf
                                 <button type="submit" class="group flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 hover:text-gray-900">
                                     <i class="fas fa-sign-out-alt mr-3 flex-shrink-0 h-5 w-5"></i>
-                                    Logout
+                                    Keluar
                                 </button>
                             </form>
                         </div>
@@ -121,25 +121,25 @@
                                 <i class="fas fa-tachometer-alt mr-3 h-5 w-5"></i>
                                 Dashboard
                             </a>
-                            <a href="{{ route('admin.users.index') }}" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
+                                                        <a href="{{ route('admin.users.index') }}" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
                                 <i class="fas fa-users mr-3 h-5 w-5"></i>
-                                Users Management
+                                Kelola Pengguna
                             </a>
                             <a href="{{ route('admin.tasks.index') }}" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
                                 <i class="fas fa-tasks mr-3 h-5 w-5"></i>
-                                Manage Tasks
+                                Kelola Tugas
                             </a>
                             <a href="{{ route('admin.attendance.index') }}" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
                                 <i class="fas fa-clock mr-3 h-5 w-5"></i>
-                                Employee Attendance
+                                Absensi Karyawan
                             </a>
                             <a href="{{ route('admin.reports.index') }}" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
                                 <i class="fas fa-chart-bar mr-3 h-5 w-5"></i>
-                                Reports
+                                Laporan
                             </a>
                             <a href="{{ route('admin.emergency-reports.index') }}" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
                                 <i class="fas fa-exclamation-triangle mr-3 h-5 w-5"></i>
-                                Emergency Reports
+                                Laporan Darurat
                             </a>
                         </nav>
                     </div>
@@ -161,7 +161,7 @@
                                 <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">
                                     <i class="fas fa-search h-5 w-5"></i>
                                 </div>
-                                <input id="search-field" class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm" placeholder="Search..." type="search">
+                                <input id="search-field" class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm" placeholder="Cari..." type="search">
                             </div>
                         </div>
                     </div>

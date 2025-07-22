@@ -3,6 +3,10 @@
 @section('title', 'Laporan Isu & Permintaan - Sinergia')
 @section('header', 'Laporan Isu & Permintaan')
 
+@php
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 @section('content')
 <div class="p-4 space-y-6">
     <!-- Formulir Laporan Isu & Permintaan -->
@@ -16,7 +20,7 @@
             <p class="text-sm text-blue-700">Isi formulir untuk melaporkan masalah atau permintaan perbaikan.</p>
         </div>
 
-        <form method="POST" action="{{ route('user.emergency-reports.store') }}" class="space-y-6">
+        <form method="POST" action="{{ route('user.emergency-reports.store') }}" class="space-y-6" enctype="multipart/form-data">
             @csrf
 
             <!-- Langkah 1: Apa masalahnya? -->
@@ -116,6 +120,41 @@
                 >
             </div>
 
+            <!-- Langkah 5: Upload Bukti (Opsional) -->
+            <div class="bg-white rounded-lg p-4 border-2 border-gray-200">
+                <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">5</div>
+                    <label for="attachment" class="text-lg font-semibold text-gray-800">
+                        <i class="fas fa-paperclip mr-2"></i>Bukti Masalah <span class="text-sm text-gray-500">(Foto/Video/Dokumen)</span>
+                    </label>
+                </div>
+                <div class="relative">
+                    <input
+                        type="file"
+                        id="attachment"
+                        name="attachment"
+                        accept="image/*,video/*,.pdf,.doc,.docx"
+                        class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        onchange="updateFileName(this)"
+                    >
+                </div>
+                <div class="flex items-center mt-2 text-sm text-gray-600">
+                    <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                    <span>Format: JPG, PNG, MP4, PDF, DOC • Maksimal 10MB</span>
+                </div>
+                <div id="file-preview" class="hidden mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div class="flex items-center justify-between">
+                        <span id="file-name" class="text-sm text-blue-800 font-medium"></span>
+                        <button type="button" onclick="removeFile()" class="text-red-600 hover:text-red-800 font-medium">
+                            <i class="fas fa-times mr-1"></i>Hapus
+                        </button>
+                    </div>
+                </div>
+                @error('attachment')
+                    <p class="text-red-600 text-sm mt-2 font-medium">{{ $message }}</p>
+                @enderror
+            </div>
+
             <!-- Tombol Kirim -->
             <div class="pt-4">
                 <button type="submit" class="w-full bg-blue-600 text-white py-4 px-6 rounded-xl text-xl font-bold hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg">
@@ -128,6 +167,33 @@
                 </p>
             </div>
         </form>
+
+        <!-- Emergency Call Button -->
+        <div class="mt-6 p-4 bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-xl shadow-sm">
+            <div class="text-center mb-4">
+                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i class="fas fa-phone text-white text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-orange-800">Butuh Bantuan Segera?</h3>
+                <p class="text-sm text-orange-700">Untuk situasi darurat yang memerlukan penanganan segera</p>
+            </div>
+            
+            <div class="space-y-3">
+                <button 
+                    onclick="callSupervisor()" 
+                    class="w-full bg-orange-600 text-white py-3 px-6 rounded-xl text-lg font-bold hover:bg-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                >
+                    <i class="fas fa-phone mr-2"></i>HUBUNGI SUPERVISOR
+                </button>
+                
+                <button 
+                    onclick="callSecurity()" 
+                    class="w-full bg-red-600 text-white py-3 px-6 rounded-xl text-lg font-bold hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                >
+                    <i class="fas fa-shield-alt mr-2"></i>HUBUNGI SECURITY
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Bagian Riwayat Laporan -->
@@ -205,6 +271,25 @@
                                 </div>
                             @endif
 
+                            @if($report->attachments && count($report->attachments) > 0)
+                                <div>
+                                    <p class="font-semibold text-gray-700 mb-2">Lampiran:</p>
+                                    <div class="space-y-2">
+                                        @foreach($report->attachments as $attachment)
+                                            <a 
+                                                href="{{ Storage::url($attachment) }}" 
+                                                target="_blank"
+                                                class="inline-flex items-center px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
+                                            >
+                                                <i class="fas fa-paperclip mr-2"></i>
+                                                <span class="text-sm font-medium">{{ basename($attachment) }}</span>
+                                                <i class="fas fa-external-link-alt ml-2 text-xs"></i>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
                             @if($report->admin_notes)
                                 <div class="bg-blue-50 p-3 rounded-lg">
                                     <p class="font-semibold text-blue-800 mb-1">Tanggapan dari Admin:</p>
@@ -256,6 +341,73 @@
 </style>
 
 <script>
+// Function untuk update file name preview
+function updateFileName(input) {
+    const filePreview = document.getElementById('file-preview');
+    const fileName = document.getElementById('file-name');
+    
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const fileSize = (file.size / 1024 / 1024).toFixed(2); // Convert to MB
+        
+        fileName.innerHTML = `
+            <i class="fas fa-file mr-2"></i>
+            <span class="font-medium">${file.name}</span>
+            <span class="text-blue-600 text-xs ml-2">(${fileSize} MB)</span>
+        `;
+        filePreview.classList.remove('hidden');
+    } else {
+        filePreview.classList.add('hidden');
+    }
+}
+
+// Function untuk remove file
+function removeFile() {
+    const fileInput = document.getElementById('attachment');
+    const filePreview = document.getElementById('file-preview');
+    
+    fileInput.value = '';
+    filePreview.classList.add('hidden');
+}
+
+// Function to call supervisor
+function callSupervisor() {
+    const supervisorPhone = '{{ config("emergency.supervisor_phone") }}';
+    
+    if (confirm('Apakah Anda yakin ingin menghubungi supervisor untuk situasi darurat?')) {
+        // Untuk mobile device, gunakan tel: protocol
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
+            window.location.href = `tel:${supervisorPhone}`;
+        } else {
+            // Untuk desktop, tampilkan nomor dan copy ke clipboard
+            navigator.clipboard.writeText(supervisorPhone).then(function() {
+                alert(`Nomor supervisor: ${supervisorPhone}\n(Nomor telah disalin ke clipboard)`);
+            }).catch(function() {
+                alert(`Nomor supervisor: ${supervisorPhone}`);
+            });
+        }
+    }
+}
+
+// Function to call security
+function callSecurity() {
+    const securityPhone = '{{ config("emergency.security_phone") }}';
+    
+    if (confirm('Apakah Anda yakin ingin menghubungi security untuk situasi darurat?')) {
+        // Untuk mobile device, gunakan tel: protocol
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
+            window.location.href = `tel:${securityPhone}`;
+        } else {
+            // Untuk desktop, tampilkan nomor dan copy ke clipboard
+            navigator.clipboard.writeText(securityPhone).then(function() {
+                alert(`Nomor security: ${securityPhone}\n(Nomor telah disalin ke clipboard)`);
+            }).catch(function() {
+                alert(`Nomor security: ${securityPhone}`);
+            });
+        }
+    }
+}
+
 // Tampilkan/sembunyikan detail laporan dengan umpan balik yang disempurnakan
 function toggleReportDetails(reportId) {
     const details = document.getElementById(`details-${reportId}`);

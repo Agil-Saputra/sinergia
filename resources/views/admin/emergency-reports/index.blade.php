@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('title', 'Emergency Reports')
+@section('title', 'Laporan Darurat')
 
 @section('content')
 <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
-        <h1 class="text-2xl font-semibold text-gray-900">Emergency Reports</h1>
-        <p class="mt-2 text-sm text-gray-700">Monitor and manage emergency reports from employees.</p>
+        <h1 class="text-2xl font-semibold text-gray-900">Laporan Darurat</h1>
+        <p class="mt-2 text-sm text-gray-700">Monitor dan kelola laporan darurat dari karyawan.</p>
     </div>
 </div>
 
@@ -16,31 +16,31 @@
         <div>
             <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
             <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                <option value="">All Status</option>
-                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Resolved</option>
+                <option value="">Semua Status</option>
+                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Tertunda</option>
+                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Sedang Proses</option>
+                <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Diselesaikan</option>
             </select>
         </div>
         <div>
-            <label for="urgency" class="block text-sm font-medium text-gray-700">Urgency</label>
+            <label for="urgency" class="block text-sm font-medium text-gray-700">Urgensi</label>
             <select id="urgency" name="urgency" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                <option value="">All Urgency</option>
-                <option value="low" {{ request('urgency') == 'low' ? 'selected' : '' }}>Low</option>
-                <option value="medium" {{ request('urgency') == 'medium' ? 'selected' : '' }}>Medium</option>
-                <option value="high" {{ request('urgency') == 'high' ? 'selected' : '' }}>High</option>
-                <option value="critical" {{ request('urgency') == 'critical' ? 'selected' : '' }}>Critical</option>
+                <option value="">Semua Urgensi</option>
+                <option value="low" {{ request('urgency') == 'low' ? 'selected' : '' }}>Rendah</option>
+                <option value="medium" {{ request('urgency') == 'medium' ? 'selected' : '' }}>Sedang</option>
+                <option value="high" {{ request('urgency') == 'high' ? 'selected' : '' }}>Tinggi</option>
+                <option value="critical" {{ request('urgency') == 'critical' ? 'selected' : '' }}>Kritis</option>
             </select>
         </div>
         <div>
-            <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+            <label for="type" class="block text-sm font-medium text-gray-700">Tipe</label>
             <select id="type" name="type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
-                <option value="">All Types</option>
+                <option value="">Semua Tipe</option>
                 <option value="maintenance" {{ request('type') == 'maintenance' ? 'selected' : '' }}>Maintenance</option>
-                <option value="safety" {{ request('type') == 'safety' ? 'selected' : '' }}>Safety</option>
-                <option value="security" {{ request('type') == 'security' ? 'selected' : '' }}>Security</option>
-                <option value="health" {{ request('type') == 'health' ? 'selected' : '' }}>Health</option>
-                <option value="other" {{ request('type') == 'other' ? 'selected' : '' }}>Other</option>
+                <option value="safety" {{ request('type') == 'safety' ? 'selected' : '' }}>Keselamatan</option>
+                <option value="security" {{ request('type') == 'security' ? 'selected' : '' }}>Keamanan</option>
+                <option value="health" {{ request('type') == 'health' ? 'selected' : '' }}>Kesehatan</option>
+                <option value="other" {{ request('type') == 'other' ? 'selected' : '' }}>Lainnya</option>
             </select>
         </div>
         <div class="flex items-end">
@@ -64,7 +64,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Total Reports</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Laporan</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ $reports->total() }}</dd>
                     </dl>
                 </div>
@@ -188,12 +188,12 @@
                 <div class="flex space-x-2">
                     <a href="{{ route('admin.emergency-reports.show', $report) }}" 
                        class="flex-1 bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 text-center">
-                        View Details
+                        Lihat Detail
                     </a>
                     @if($report->status !== 'resolved')
                         <button onclick="openStatusModal({{ $report->id }}, '{{ $report->status }}', '{{ addslashes($report->admin_notes) }}')"
                                 class="bg-gray-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">
-                            Update Status
+                            Perbarui Status
                         </button>
                     @endif
                 </div>
@@ -204,8 +204,8 @@
             <div class="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
                 <i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No Emergency Reports</h3>
-            <p class="text-gray-600">No emergency reports match your current filters</p>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Tidak Ada Laporan Darurat</h3>
+            <p class="text-gray-600">Tidak ada laporan darurat yang sesuai dengan filter saat ini</p>
         </div>
     @endforelse
 </div>
@@ -225,37 +225,37 @@
                 @csrf
                 @method('PUT')
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Update Status</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Perbarui Status</h3>
                     
                     <!-- Status -->
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                         <select name="status" id="status_select" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            <option value="pending">Pending</option>
-                            <option value="in_progress">In Progress</option>
-                            <option value="resolved">Resolved</option>
+                            <option value="pending">Tertunda</option>
+                            <option value="in_progress">Sedang Proses</option>
+                            <option value="resolved">Diselesaikan</option>
                         </select>
                     </div>
 
                     <!-- Admin Notes -->
                     <div class="mb-4">
                         <label for="admin_notes" class="block text-sm font-medium text-gray-700 mb-2">
-                            Admin Notes
+                            Catatan Admin
                         </label>
                         <textarea id="admin_notes" name="admin_notes" rows="4"
                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                  placeholder="Add notes about the resolution or progress..."></textarea>
+                                  placeholder="Tambahkan catatan tentang penyelesaian atau progress..."></textarea>
                     </div>
                 </div>
 
                 <div class="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end space-x-2">
                     <button type="button" onclick="closeStatusModal()"
                             class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300">
-                        Cancel
+                        Batal
                     </button>
                     <button type="submit"
                             class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                        Update Status
+                        Perbarui Status
                     </button>
                 </div>
             </form>

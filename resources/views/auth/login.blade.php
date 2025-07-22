@@ -82,6 +82,30 @@
                         @enderror
                     </div>
 
+                    <!-- Kolom Password (Opsional) -->
+                    <div id="passwordField" style="display: none;">
+                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+                            Password (jika ada)
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="w-full px-4 py-4 bg-gray-700 border border-gray-600 rounded-md text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-lg {{ $errors->has('password') ? 'border-red-500' : '' }}"
+                            placeholder="Masukkan password"
+                        >
+                        @error('password')
+                            <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+                        
+                        <!-- Link Lupa Password -->
+                        <div class="mt-2 text-right">
+                            <a href="{{ route('forgot-password') }}" class="text-blue-400 hover:text-blue-300 text-sm underline">
+                                Lupa password?
+                            </a>
+                        </div>
+                    </div>
+
                     <!-- Ingat Saya -->
                     <div class="flex items-center justify-center">
                         <input
@@ -112,9 +136,11 @@
         <div class="fade-in mt-6 w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
             <h3 class="text-sm font-medium text-gray-200 mb-2">Contoh Kode Karyawan:</h3>
             <div class="text-xs text-gray-400 space-y-1">
-                <p><strong>Admin:</strong> SBY00001</p>
-                <p><strong>Karyawan:</strong> SBY09876, SBY09877, SBY09878</p>
+                <p><strong>Admin:</strong> SBY00001 (password: admin123)</p>
+                <p><strong>Tanpa Password:</strong> SBY09876, SBY09878</p>
+                <p><strong>Dengan Password:</strong> SBY09877 (sari123), SBY09879 (indah123)</p>
                 <p class="text-green-400 mt-2">✓ Otomatis absen masuk setelah login</p>
+                <p class="text-blue-400 mt-1">📱 Gunakan "Lupa Password" untuk testing WhatsApp</p>
             </div>
         </div>
     </div>
@@ -125,24 +151,67 @@
             e.target.value = e.target.value.toUpperCase();
         });
 
-        // Auto submit form when employee code is complete (8 characters)
-        document.getElementById('employee_code').addEventListener('input', function(e) {
+        // Check if user needs password after typing employee code
+        document.getElementById('employee_code').addEventListener('blur', function(e) {
             if (e.target.value.length === 8) {
-                // Small delay to allow user to see the complete code and ensure CSRF token is ready
-                setTimeout(() => {
-                    // Re-check if form still has valid CSRF token
-                    const form = document.querySelector('form');
-                    const csrfToken = form.querySelector('input[name="_token"]');
-                    
-                    if (csrfToken && csrfToken.value) {
-                        form.submit();
-                    } else {
-                        // If CSRF token is missing, reload page
-                        location.reload();
-                    }
-                }, 800); // Increased delay
+                checkIfPasswordRequired(e.target.value);
             }
         });
+
+        // Function to check if password is required for this employee code
+        function checkIfPasswordRequired(employeeCode) {
+            fetch('/check-password-required', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    employee_code: employeeCode
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const passwordField = document.getElementById('passwordField');
+                if (data.password_required) {
+                    passwordField.style.display = 'block';
+                    document.getElementById('password').focus();
+                } else {
+                    passwordField.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.log('Error checking password requirement:', error);
+            });
+        }
+
+        // Auto submit form when employee code is complete (8 characters) and no password is required
+        document.getElementById('employee_code').addEventListener('input', function(e) {
+            if (e.target.value.length === 8) {
+                // Check if password field is visible
+                const passwordField = document.getElementById('passwordField');
+                if (passwordField.style.display === 'none' || !passwordField.style.display) {
+                    // Small delay to allow user to see the complete code and ensure CSRF token is ready
+                    setTimeout(() => {
+                        // Re-check if form still has valid CSRF token
+                        const form = document.querySelector('form');
+                        const csrfToken = form.querySelector('input[name="_token"]');
+                        
+                        if (csrfToken && csrfToken.value) {
+                            form.submit();
+                        } else {
+                            // If CSRF token is missing, reload page
+                            location.reload();
+                        }
+                    }, 800); // Increased delay
+                }
+            }
+        });
+
+        // Show password field immediately if there's a password error from server
+        @if($errors->has('password'))
+            document.getElementById('passwordField').style.display = 'block';
+        @endif
 
         // Prevent multiple form submissions
         document.querySelector('form').addEventListener('submit', function(e) {

@@ -19,7 +19,8 @@ class UserSeeder extends Seeder
             'name' => 'Administrator',
             'employee_code' => 'SBY00001',
             'email' => 'admin@sinergia.com',
-            'password' => null,
+            'phone_number' => '081234567890',
+            'password' => Hash::make('admin123'),
             'role' => 'admin',
         ]);
 
@@ -28,7 +29,8 @@ class UserSeeder extends Seeder
             'name' => 'Budi Santoso',
             'employee_code' => 'SBY09876',
             'email' => null,
-            'password' => null,
+            'phone_number' => '082345678901',
+            'password' => null, // No password initially
             'role' => 'user',
         ]);
 
@@ -36,7 +38,8 @@ class UserSeeder extends Seeder
             'name' => 'Sari Dewi',
             'employee_code' => 'SBY09877',
             'email' => null,
-            'password' => null,
+            'phone_number' => '083456789012',
+            'password' => Hash::make('sari123'), // Has password
             'role' => 'user',
         ]);
 
@@ -44,6 +47,7 @@ class UserSeeder extends Seeder
             'name' => 'Ahmad Rizki',
             'employee_code' => 'SBY09878',
             'email' => null,
+            'phone_number' => '084567890123',
             'password' => null,
             'role' => 'user',
         ]);
@@ -52,7 +56,8 @@ class UserSeeder extends Seeder
             'name' => 'Indah Permata',
             'employee_code' => 'SBY09879',
             'email' => null,
-            'password' => null,
+            'phone_number' => '085678901234',
+            'password' => Hash::make('indah123'), // Has password
             'role' => 'user',
         ]);
 
@@ -60,6 +65,7 @@ class UserSeeder extends Seeder
             'name' => 'Joko Susilo',
             'employee_code' => 'SBY09880',
             'email' => null,
+            'phone_number' => null, // No phone number for testing error case
             'password' => null,
             'role' => 'user',
         ]);

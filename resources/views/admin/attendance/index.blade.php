@@ -1,18 +1,12 @@
 @extends('layouts.admin')
 
-@section('title', 'Employee Attendance')
+@section('title', 'Absensi Karyawan')
 
 @section('content')
 <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
-        <h1 class="text-2xl font-semibold text-gray-900">Employee Attendance</h1>
-        <p class="mt-2 text-sm text-gray-700">Monitor employee check-in and check-out times.</p>
-    </div>
-    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <a href="{{ route('admin.attendance.stats') }}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            <i class="fas fa-chart-line mr-2"></i>
-            View Statistics
-        </a>
+        <h1 class="text-2xl font-semibold text-gray-900">Absensi Karyawan</h1>
+        <p class="mt-2 text-sm text-gray-700">Monitor waktu check-in dan check-out karyawan.</p>
     </div>
 </div>
 
@@ -20,14 +14,14 @@
 <div class="mt-8 bg-white shadow rounded-lg p-6">
     <form method="GET" action="{{ route('admin.attendance.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-            <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+            <label for="date" class="block text-sm font-medium text-gray-700">Tanggal</label>
             <input type="date" id="date" name="date" value="{{ request('date', today()->toDateString()) }}" 
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
         </div>
         <div>
-            <label for="user_id" class="block text-sm font-medium text-gray-700">Employee</label>
+            <label for="user_id" class="block text-sm font-medium text-gray-700">Karyawan</label>
             <select id="user_id" name="user_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                <option value="">All Employees</option>
+                <option value="">Semua Karyawan</option>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
                         {{ $user->name }} ({{ $user->employee_code }})
@@ -56,7 +50,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Total Records</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Catatan</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ $attendances->total() }}</dd>
                     </dl>
                 </div>
@@ -74,7 +68,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Completed Shifts</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Shift Selesai</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ $attendances->where('check_out', '!=', null)->count() }}</dd>
                     </dl>
                 </div>
@@ -92,7 +86,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Active Now</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Aktif Sekarang</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ $attendances->where('check_out', null)->count() }}</dd>
                     </dl>
                 </div>
@@ -110,7 +104,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Today's Date</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Tanggal Hari Ini</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ request('date', today()->format('M d')) }}</dd>
                     </dl>
                 </div>
@@ -127,11 +121,11 @@
                 <table class="min-w-full divide-y divide-gray-300">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Karyawan</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check In</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check Out</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hours Worked</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Kerja</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         </tr>
                     </thead>
@@ -155,7 +149,7 @@
                                     {{ $attendance->date->format('M d, Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $attendance->check_in ? $attendance->check_in->format('H:i') : 'Not set' }}
+                                    {{ $attendance->check_in ? $attendance->check_in->format('H:i') : 'Belum diatur' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {{ $attendance->check_out ? $attendance->check_out->format('H:i') : '-' }}
@@ -164,7 +158,7 @@
                                     @if($attendance->check_out && $attendance->check_in)
                                         {{ $attendance->check_in->diffInHours($attendance->check_out) }}h {{ $attendance->check_in->diffInMinutes($attendance->check_out) % 60 }}m
                                     @else
-                                        <span class="text-blue-600">In Progress</span>
+                                        <span class="text-blue-600">Sedang Berlangsung</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -182,7 +176,7 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    No attendance records found for the selected filters.
+                                    Tidak ada catatan absensi ditemukan untuk filter yang dipilih.
                                 </td>
                             </tr>
                         @endforelse

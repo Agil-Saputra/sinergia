@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Reports')
+@section('title', 'Laporan')
 
 @section('content')
 <div class="mb-8">
-    <h1 class="text-2xl font-semibold text-gray-900">Reports Dashboard</h1>
-    <p class="mt-2 text-sm text-gray-700">Access detailed reports and analytics for your organization.</p>
+    <h1 class="text-2xl font-semibold text-gray-900">Dashboard Laporan</h1>
+    <p class="mt-2 text-sm text-gray-700">Akses laporan detail dan analitik untuk organisasi Anda.</p>
 </div>
 
 <!-- Report Categories -->
@@ -20,14 +20,14 @@
                     </div>
                 </div>
                 <div class="ml-4 flex-1">
-                    <h3 class="text-lg font-medium text-gray-900">Task Reports</h3>
-                    <p class="text-sm text-gray-600">View task completion rates, performance metrics, and productivity analytics.</p>
+                    <h3 class="text-lg font-medium text-gray-900">Laporan Tugas</h3>
+                    <p class="text-sm text-gray-600">Lihat tingkat penyelesaian tugas, metrik kinerja, dan analitik produktivitas.</p>
                 </div>
             </div>
             <div class="mt-6">
                 <a href="{{ route('admin.reports.tasks') }}" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors inline-flex items-center justify-center">
                     <i class="fas fa-chart-bar mr-2"></i>
-                    View Task Reports
+                    Lihat Laporan Tugas
                 </a>
             </div>
         </div>
@@ -43,14 +43,14 @@
                     </div>
                 </div>
                 <div class="ml-4 flex-1">
-                    <h3 class="text-lg font-medium text-gray-900">Attendance Reports</h3>
-                    <p class="text-sm text-gray-600">Monitor employee attendance patterns, working hours, and punctuality.</p>
+                    <h3 class="text-lg font-medium text-gray-900">Laporan Absensi</h3>
+                    <p class="text-sm text-gray-600">Monitor pola absensi karyawan, jam kerja, dan ketepatan waktu.</p>
                 </div>
             </div>
             <div class="mt-6">
                 <a href="{{ route('admin.reports.attendance') }}" class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors inline-flex items-center justify-center">
                     <i class="fas fa-calendar-check mr-2"></i>
-                    View Attendance Reports
+                    Lihat Laporan Absensi
                 </a>
             </div>
         </div>
@@ -66,14 +66,14 @@
                     </div>
                 </div>
                 <div class="ml-4 flex-1">
-                    <h3 class="text-lg font-medium text-gray-900">Emergency Reports</h3>
-                    <p class="text-sm text-gray-600">Analyze emergency incidents, response times, and resolution patterns.</p>
+                    <h3 class="text-lg font-medium text-gray-900">Laporan Darurat</h3>
+                    <p class="text-sm text-gray-600">Analisis insiden darurat, waktu respons, dan pola penyelesaian.</p>
                 </div>
             </div>
             <div class="mt-6">
                 <a href="{{ route('admin.reports.emergency') }}" class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors inline-flex items-center justify-center">
                     <i class="fas fa-clipboard-list mr-2"></i>
-                    View Emergency Reports
+                    Lihat Laporan Darurat
                 </a>
             </div>
         </div>
@@ -82,7 +82,7 @@
 
 <!-- Quick Stats Overview -->
 <div class="mt-12">
-    <h2 class="text-lg font-medium text-gray-900 mb-6">Quick Overview</h2>
+    <h2 class="text-lg font-medium text-gray-900 mb-6">Ikhtisar Cepat</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-white overflow-hidden shadow rounded-lg">
             <div class="p-5">
@@ -94,7 +94,7 @@
                     </div>
                     <div class="ml-5 w-0 flex-1">
                         <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Tasks Completed Today</dt>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Tugas Selesai Hari Ini</dt>
                             <dd class="text-lg font-medium text-gray-900">{{ \App\Models\Task::whereDate('completed_at', today())->count() }}</dd>
                         </dl>
                     </div>
@@ -112,7 +112,7 @@
                     </div>
                     <div class="ml-5 w-0 flex-1">
                         <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Employees Present</dt>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Karyawan Hadir</dt>
                             <dd class="text-lg font-medium text-gray-900">{{ \App\Models\Attendance::whereDate('date', today())->distinct('user_id')->count() }}</dd>
                         </dl>
                     </div>
@@ -130,7 +130,7 @@
                     </div>
                     <div class="ml-5 w-0 flex-1">
                         <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Pending Emergencies</dt>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Darurat Tertunda</dt>
                             <dd class="text-lg font-medium text-gray-900">{{ \App\Models\EmergencyReport::where('status', 'pending')->count() }}</dd>
                         </dl>
                     </div>
@@ -147,12 +147,11 @@
                         </div>
                     </div>
                     <div class="ml-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Completion Rate</dt>
+                                                <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Tingkat Penyelesaian</dt>
                             <dd class="text-lg font-medium text-gray-900">
                                 @php
                                     $totalTasks = \App\Models\Task::whereDate('assigned_date', today())->count();
-                                    $completedTasks = \App\Models\Task::whereDate('assigned_date', today())->where('status', 'completed')->count();
                                     $rate = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
                                 @endphp
                                 {{ $rate }}%
@@ -167,7 +166,7 @@
 
 <!-- Recent Activity -->
 <div class="mt-12">
-    <h2 class="text-lg font-medium text-gray-900 mb-6">Recent Activity</h2>
+    <h2 class="text-lg font-medium text-gray-900 mb-6">Aktivitas Terbaru</h2>
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
         <ul class="divide-y divide-gray-200">
             @php
@@ -184,7 +183,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-900">{{ $task->title }}</p>
-                                <p class="text-sm text-gray-500">Completed by {{ $task->user->name }}</p>
+                                <p class="text-sm text-gray-500">Diselesaikan oleh {{ $task->user->name }}</p>
                             </div>
                         </div>
                         <div class="flex items-center text-sm text-gray-500">
@@ -195,7 +194,7 @@
                 </li>
             @empty
                 <li class="px-6 py-4 text-center text-gray-500">
-                    No recent completed tasks
+                    Tidak ada tugas yang baru diselesaikan
                 </li>
             @endforelse
         </ul>

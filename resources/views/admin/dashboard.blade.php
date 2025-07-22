@@ -7,7 +7,7 @@
 <!-- Dashboard Header -->
 <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-    <p class="text-gray-600 mt-2">Welcome back, {{ Auth::user()->name }}! Here's what's happening today.</p>
+    <p class="text-gray-600 mt-2">Selamat datang kembali, {{ Auth::user()->name }}! Ini yang terjadi hari ini.</p>
 </div>
 
 <!-- Quick Stats -->
@@ -20,7 +20,7 @@
                 </svg>
             </div>
             <div class="ml-4">
-                <p class="text-sm font-medium text-gray-600">Total Employees</p>
+                <p class="text-sm font-medium text-gray-600">Total Karyawan</p>
                 <p class="text-2xl font-bold text-gray-900">{{ $totalEmployees }}</p>
             </div>
         </div>
@@ -34,7 +34,7 @@
                 </svg>
             </div>
             <div class="ml-4">
-                <p class="text-sm font-medium text-gray-600">Present Today</p>
+                <p class="text-sm font-medium text-gray-600">Hadir Hari Ini</p>
                 <p class="text-2xl font-bold text-gray-900">{{ $todayPresent }}</p>
             </div>
         </div>
@@ -48,7 +48,7 @@
                 </svg>
             </div>
             <div class="ml-4">
-                <p class="text-sm font-medium text-gray-600">Pending Tasks</p>
+                <p class="text-sm font-medium text-gray-600">Tugas Tertunda</p>
                 <p class="text-2xl font-bold text-gray-900">{{ $pendingTasks }}</p>
             </div>
         </div>
@@ -62,7 +62,7 @@
                 </svg>
             </div>
             <div class="ml-4">
-                <p class="text-sm font-medium text-gray-600">Completed Tasks</p>
+                <p class="text-sm font-medium text-gray-600">Tugas Selesai</p>
                 <p class="text-2xl font-bold text-gray-900">{{ $completedTasks }}</p>
             </div>
         </div>
@@ -75,8 +75,8 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100">
         <div class="p-6 border-b border-gray-100">
             <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-gray-900">Recent Tasks</h3>
-                <a href="{{ route('admin.tasks.index') }}" class="text-sm text-blue-600 hover:text-blue-700">View all</a>
+                <h3 class="text-lg font-semibold text-gray-900">Tugas Terbaru</h3>
+                <a href="{{ route('admin.tasks.index') }}" class="text-sm text-blue-600 hover:text-blue-700">Lihat semua</a>
             </div>
         </div>
         <div class="p-6">
@@ -92,7 +92,7 @@
                         </span>
                     </div>
                 @empty
-                    <p class="text-gray-500 text-center py-4">No tasks found</p>
+                    <p class="text-gray-500 text-center py-4">Tidak ada tugas ditemukan</p>
                 @endforelse
             </div>
         </div>
@@ -102,8 +102,8 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100">
         <div class="p-6 border-b border-gray-100">
             <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-gray-900">Today's Attendance</h3>
-                <a href="{{ route('admin.attendance.index') }}" class="text-sm text-blue-600 hover:text-blue-700">View all</a>
+                <h3 class="text-lg font-semibold text-gray-900">Absensi Hari Ini</h3>
+                <a href="{{ route('admin.attendance.index') }}" class="text-sm text-blue-600 hover:text-blue-700">Lihat semua</a>
             </div>
         </div>
         <div class="p-6">
@@ -113,15 +113,15 @@
                         <div class="flex-1">
                             <p class="font-medium text-gray-900">{{ $attendance->user->name }}</p>
                             <p class="text-sm text-gray-600">
-                                Check-in: {{ $attendance->check_in ? $attendance->check_in->format('H:i') : 'Not set' }}
+                                Check-in: {{ $attendance->check_in ? $attendance->check_in->format('H:i') : 'Belum diatur' }}
                             </p>
                         </div>
                         <span class="px-2 py-1 text-xs font-medium rounded-full {{ $attendance->check_out ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
-                            {{ $attendance->check_out ? 'Completed' : 'Active' }}
+                            {{ $attendance->check_out ? 'Selesai' : 'Aktif' }}
                         </span>
                     </div>
                 @empty
-                    <p class="text-gray-500 text-center py-4">No attendance records today</p>
+                    <p class="text-gray-500 text-center py-4">Tidak ada catatan absensi hari ini</p>
                 @endforelse
             </div>
         </div>
@@ -139,9 +139,9 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <h3 class="text-lg font-semibold text-red-900">Emergency Reports Today</h3>
-                    <p class="text-red-700">{{ $emergencyReports }} emergency report{{ $emergencyReports > 1 ? 's' : '' }} received today</p>
-                    <a href="{{ route('admin.emergency-reports.index') }}" class="text-sm text-red-600 hover:text-red-700 font-medium">Review reports →</a>
+                    <h3 class="text-lg font-semibold text-red-900">Laporan Darurat Hari Ini</h3>
+                    <p class="text-red-700">{{ $emergencyReports }} laporan darurat{{ $emergencyReports > 1 ? '' : '' }} diterima hari ini</p>
+                    <a href="{{ route('admin.emergency-reports.index') }}" class="text-sm text-red-600 hover:text-red-700 font-medium">Tinjau laporan →</a>
                 </div>
             </div>
         </div>

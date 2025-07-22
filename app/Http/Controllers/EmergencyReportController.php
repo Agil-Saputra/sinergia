@@ -38,15 +38,26 @@ class EmergencyReportController extends Controller
             'description' => 'required|string|min:10',
             'priority' => 'required|in:low,medium,high,critical',
             'location' => 'nullable|string|max:255',
+            'attachment' => 'nullable|file|mimes:jpg,jpeg,png,mp4,avi,mov,pdf,doc,docx|max:10240', // 10MB max
         ]);
 
         try {
+            $attachments = [];
+            
+            // Handle file upload
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('emergency-reports', $filename, 'public');
+                $attachments[] = $path;
+            }
             EmergencyReport::create([
                 'user_id' => Auth::id(),
                 'title' => $validated['title'],
                 'description' => $validated['description'],
                 'priority' => $validated['priority'],
                 'location' => $validated['location'] ?? null,
+                'attachments' => $attachments,
                 'status' => 'pending',
                 'reported_at' => now(),
             ]);

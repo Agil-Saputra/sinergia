@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 
-@section('title', 'Users Management')
+@section('title', 'Kelola Pengguna')
 
 @section('content')
 <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
-        <h1 class="text-2xl font-semibold text-gray-900">Users Management</h1>
-        <p class="mt-2 text-sm text-gray-700">Manage all users in the system including employees and administrators.</p>
+        <h1 class="text-2xl font-semibold text-gray-900">Kelola Pengguna</h1>
+        <p class="mt-2 text-sm text-gray-700">Kelola semua pengguna dalam sistem termasuk karyawan dan administrator.</p>
     </div>
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
         <a href="{{ route('admin.users.create') }}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             <i class="fas fa-plus mr-2"></i>
-            Add User
+            Tambah Pengguna
         </a>
     </div>
 </div>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Pengguna</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ $users->total() }}</dd>
                     </dl>
                 </div>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Administrators</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Administrator</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ \App\Models\User::where('role', 'admin')->count() }}</dd>
                     </dl>
                 </div>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Employees</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Karyawan</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ \App\Models\User::where('role', 'user')->count() }}</dd>
                     </dl>
                 </div>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="ml-5 w-0 flex-1">
                     <dl>
-                        <dt class="text-sm font-medium text-gray-500 truncate">Active Today</dt>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Aktif Hari Ini</dt>
                         <dd class="text-lg font-medium text-gray-900">{{ \App\Models\Attendance::whereDate('date', today())->distinct('user_id')->count() }}</dd>
                     </dl>
                 </div>
@@ -99,11 +99,11 @@
                 <table class="min-w-full divide-y divide-gray-300">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee Code</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pengguna</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Karyawan</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                            <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat</th>
+                            <th scope="col" class="relative px-6 py-3"><span class="sr-only">Aksi</span></th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -141,7 +141,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     @if($user->id !== Auth::id())
-                                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:text-red-900">
@@ -154,7 +154,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    No users found.
+                                    Tidak ada pengguna ditemukan.
                                 </td>
                             </tr>
                         @endforelse
