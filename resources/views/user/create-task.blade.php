@@ -72,40 +72,9 @@
             @enderror
         </div>
 
-        <!-- Tanggal Ditugaskan -->
-        <div class="bg-white rounded-lg p-4 shadow-sm">
-            <label for="assigned_date" class="block text-sm font-bold text-gray-700 mb-2">📅 Tanggal Ditugaskan</label>
-            <input 
-                type="date" 
-                id="assigned_date" 
-                name="assigned_date" 
-                value="{{ old('assigned_date', date('Y-m-d')) }}"
-                required 
-                min="{{ date('Y-m-d') }}"
-                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-lg"
-            >
-            @error('assigned_date')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Kategori (Opsional) -->
-        <div class="bg-white rounded-lg p-4 shadow-sm">
-            <label for="category" class="block text-sm font-bold text-gray-700 mb-2">🏷️ Jenis Pekerjaan (Opsional)</label>
-            <select 
-                id="category" 
-                name="category" 
-                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-                <option value="">Pilih jenis pekerjaan...</option>
-                <option value="cleaning" {{ old('category') == 'cleaning' ? 'selected' : '' }}>🧽 Kebersihan</option>
-                <option value="maintenance" {{ old('category') == 'maintenance' ? 'selected' : '' }}>🔧 Perawatan</option>
-                <option value="security" {{ old('category') == 'security' ? 'selected' : '' }}>🛡️ Keamanan</option>
-                <option value="gardening" {{ old('category') == 'gardening' ? 'selected' : '' }}>🌱 Taman</option>
-                <option value="supplies" {{ old('category') == 'supplies' ? 'selected' : '' }}>📦 Perlengkapan</option>
-                <option value="other" {{ old('category') == 'other' ? 'selected' : '' }}>📝 Lainnya</option>
-            </select>
-        </div>
+        <!-- Hidden inputs for default values -->
+        <input type="hidden" name="task_type" value="incidental">
+        <input type="hidden" name="assigned_date" value="{{ date('Y-m-d') }}">
 
         <!-- Estimasi Waktu -->
         <div class="bg-white rounded-lg p-4 shadow-sm">
@@ -132,7 +101,7 @@
                 ❌ Batal
             </a>
             <button type="submit" class="flex-1 bg-green-500 text-white py-4 px-4 rounded-lg font-bold text-lg">
-                ✅ Buat Tugas
+                ✅ Tambahkan Task Insidental
             </button>
         </div>
     </form>

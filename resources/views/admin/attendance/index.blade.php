@@ -11,16 +11,16 @@
 </div>
 
 <!-- Filters -->
-<div class="mt-8 bg-white shadow rounded-lg p-6">
-    <form method="GET" action="{{ route('admin.attendance.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="mt-8 bg-white shadow-lg rounded-2xl border-2 border-gray-100">
+    <form method="GET" action="{{ route('admin.attendance.index') }}" class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
         <div>
-            <label for="date" class="block text-sm font-medium text-gray-700">Tanggal</label>
+            <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
             <input type="date" id="date" name="date" value="{{ request('date', today()->toDateString()) }}" 
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                   class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
         </div>
         <div>
-            <label for="user_id" class="block text-sm font-medium text-gray-700">Karyawan</label>
-            <select id="user_id" name="user_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <label for="user_id" class="block text-sm font-medium text-gray-700 mb-2">Karyawan</label>
+            <select id="user_id" name="user_id" class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
                 <option value="">Semua Karyawan</option>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
@@ -30,8 +30,7 @@
             </select>
         </div>
         <div class="flex items-end">
-            <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                <i class="fas fa-search mr-2"></i>
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-4 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg">
                 Filter
             </button>
         </div>

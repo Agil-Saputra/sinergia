@@ -16,10 +16,6 @@ class Task extends Model
         'status',
         'category',
         'task_type',
-        'approval_status',
-        'approved_by',
-        'approved_at',
-        'rejection_reason',
         'is_self_assigned',
         'estimated_time',
         'assigned_date',
@@ -32,7 +28,9 @@ class Task extends Model
         'admin_feedback',
         'feedback_type',
         'feedback_by',
-        'feedback_at'
+        'feedback_at',
+        'correction_needed',
+        'correction_completed_at'
     ];
 
     protected $casts = [
@@ -41,9 +39,10 @@ class Task extends Model
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
         'feedback_at' => 'datetime',
-        'approved_at' => 'datetime',
+        'correction_completed_at' => 'datetime',
         'estimated_time' => 'decimal:1',
-        'is_self_assigned' => 'boolean'
+        'is_self_assigned' => 'boolean',
+        'correction_needed' => 'boolean'
     ];
 
     public function user(): BelongsTo
@@ -59,11 +58,6 @@ class Task extends Model
     public function feedbackBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'feedback_by');
-    }
-
-    public function approvedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'approved_by');
     }
 
     public function getPriorityColorAttribute(): string
@@ -89,9 +83,9 @@ class Task extends Model
     public function getStatusTextAttribute(): string
     {
         return match($this->status) {
-            'assigned' => '📋 Ditugaskan',
-            'in_progress' => '⚡ Sedang Dikerjakan',
-            'completed' => '✅ Selesai',
+            'assigned' => 'Ditugaskan',
+            'in_progress' => 'Sedang Dikerjakan',
+            'completed' => 'Selesai',
             default => 'Unknown'
         };
     }
@@ -109,9 +103,9 @@ class Task extends Model
     public function getFeedbackTypeTextAttribute(): string
     {
         return match($this->feedback_type) {
-            'excellent' => '⭐ Sempurna',
-            'good' => '👍 Bagus',
-            'needs_improvement' => '📝 Perlu Perbaikan',
+            'excellent' => 'Sempurna',
+            'good' => 'Bagus',
+            'needs_improvement' => 'Perlu Perbaikan',
             default => ''
         };
     }
@@ -119,8 +113,8 @@ class Task extends Model
     public function getTaskTypeTextAttribute(): string
     {
         return match($this->task_type) {
-            'routine' => '🔄 Rutin',
-            'incidental' => '⚡ Insidental',
+            'routine' => 'Rutin',
+            'incidental' => 'Insidental',
             default => 'Unknown'
         };
     }
@@ -130,26 +124,6 @@ class Task extends Model
         return match($this->task_type) {
             'routine' => 'bg-blue-100 text-blue-800',
             'incidental' => 'bg-purple-100 text-purple-800',
-            default => 'bg-gray-100 text-gray-800'
-        };
-    }
-
-    public function getApprovalStatusTextAttribute(): string
-    {
-        return match($this->approval_status) {
-            'pending' => '⏳ Menunggu Persetujuan',
-            'approved' => '✅ Disetujui',
-            'rejected' => '❌ Ditolak',
-            default => ''
-        };
-    }
-
-    public function getApprovalStatusColorAttribute(): string
-    {
-        return match($this->approval_status) {
-            'pending' => 'bg-yellow-100 text-yellow-800',
-            'approved' => 'bg-green-100 text-green-800',
-            'rejected' => 'bg-red-100 text-red-800',
             default => 'bg-gray-100 text-gray-800'
         };
     }

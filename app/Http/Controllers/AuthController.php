@@ -30,7 +30,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'employee_code' => 'required|string|size:8', // Format: SBY09876
-            'password' => 'nullable|string',
+            'password' => 'required|string', // Password is now mandatory
         ]);
 
         // Find user by employee_code
@@ -42,21 +42,18 @@ class AuthController extends Controller
             ])->onlyInput('employee_code');
         }
 
-        // Check if user has password and password is provided
-        if ($user->password && $request->filled('password')) {
-            // Login with password
-            if (!Hash::check($request->password, $user->password)) {
-                return back()->withErrors([
-                    'password' => 'Password salah.',
-                ])->onlyInput('employee_code');
-            }
-        } elseif ($user->password && !$request->filled('password')) {
-            // User has password but didn't provide it
+        // Check password
+        if (!$user->password) {
             return back()->withErrors([
-                'password' => 'Password diperlukan untuk kode karyawan ini.',
+                'password' => 'Akun ini belum memiliki password. Silakan hubungi admin atau gunakan "Lupa Password?".',
             ])->onlyInput('employee_code');
         }
-        // If user doesn't have password, allow login without password (backward compatibility)
+
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->withErrors([
+                'password' => 'Password salah.',
+            ])->onlyInput('employee_code');
+        }
 
         Auth::login($user, $request->filled('remember'));
         
@@ -104,31 +101,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Check if password is required for this employee code
-     */
-    public function checkPasswordRequired(Request $request)
-    {
-        $request->validate([
-            'employee_code' => 'required|string|size:8',
-        ]);
-
-        $user = User::where('employee_code', $request->employee_code)->first();
-        
-        return response()->json([
-            'password_required' => $user && $user->password ? true : false
-        ]);
-    }
-
-    /**
-     * Show forgot password form
-     */
-    public function showForgotPasswordForm()
-    {
-        return view('auth.forgot-password');
-    }
-
-    /**
-     * Send password via WhatsApp
+     * Send password via WhatsApp (AJAX endpoint)
      */
     public function sendPasswordViaWhatsApp(Request $request)
     {
@@ -139,67 +112,69 @@ class AuthController extends Controller
         $user = User::where('employee_code', $request->employee_code)->first();
 
         if (!$user) {
-            return back()->withErrors([
-                'employee_code' => 'Kode karyawan tidak ditemukan.',
-            ])->onlyInput('employee_code');
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode karyawan tidak ditemukan.'
+            ], 404);
         }
 
         if (!$user->phone_number) {
-            return back()->withErrors([
-                'employee_code' => 'Nomor WhatsApp tidak terdaftar untuk kode karyawan ini. Hubungi admin.',
-            ])->onlyInput('employee_code');
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor WhatsApp tidak terdaftar untuk kode karyawan ini. Hubungi admin.'
+            ], 400);
         }
 
-        // Generate new password if user doesn't have one
-        if (!$user->password) {
-            $newPassword = 'SIN' . substr($user->employee_code, -4) . rand(10, 99);
-            $user->password = Hash::make($newPassword);
-            $user->save();
-        } else {
-            // For existing password, generate a temporary one
-            $newPassword = 'SIN' . substr($user->employee_code, -4) . rand(10, 99);
-            $user->password = Hash::make($newPassword);
-            $user->save();
-        }
+        // Generate new password
+        $newPassword = 'SIN' . substr($user->employee_code, -4) . rand(10, 99);
+        $user->password = Hash::make($newPassword);
+        $user->save();
 
-        // Send via WhatsApp (you'll need to implement this with your preferred WhatsApp API)
-        $this->sendWhatsAppMessage($user->phone_number, $newPassword, $user->name);
-
-        return redirect()->route('login')->with('success', 'Password baru telah dikirim ke WhatsApp Anda.');
-    }
-
-    /**
-     * Send WhatsApp message (implement with your preferred WhatsApp API)
-     */
-    private function sendWhatsAppMessage($phoneNumber, $password, $userName)
-    {
-        // Remove leading zero and add country code for Indonesia
-        $phoneNumber = '62' . ltrim($phoneNumber, '0');
-        
-        $message = "Halo {$userName},\n\n";
-        $message .= "Password baru Anda untuk sistem absensi Sinergia:\n";
-        $message .= "*{$password}*\n\n";
-        $message .= "Silakan login dengan kode karyawan dan password ini.\n";
-        $message .= "Disarankan untuk mengganti password setelah login.\n\n";
-        $message .= "Terima kasih,\nTim Sinergia";
-
-        // Example using a WhatsApp API service (you'll need to replace with actual service)
-        // This is a placeholder - implement according to your WhatsApp API provider
+        // Send via WhatsApp using WhatsAppService
         try {
-            // Example API call (replace with your actual WhatsApp API)
-            /*
-            Http::post('https://api.whatsapp-service.com/send', [
-                'phone' => $phoneNumber,
-                'message' => $message,
-                'api_key' => env('WHATSAPP_API_KEY')
-            ]);
-            */
+            $whatsappService = app(\App\Services\WhatsAppService::class);
+            $formattedPhone = $whatsappService->formatPhoneNumber($user->phone_number);
             
-            // For now, just log the message (remove this in production)
-            Log::info("WhatsApp message to {$phoneNumber}: {$message}");
+            $message = "🔐 *PASSWORD BARU SINERGIA*\n\n";
+            $message .= "Halo *{$user->name}*,\n\n";
+            $message .= "Password baru Anda untuk sistem absensi Sinergia:\n";
+            $message .= "🔑 *{$newPassword}*\n\n";
+            $message .= "📝 *Kode Karyawan:* {$user->employee_code}\n";
+            $message .= "📱 *Password Baru:* {$newPassword}\n\n";
+            $message .= "✅ Silakan login dengan kode karyawan dan password ini.\n";
+            $message .= "⚠️ Disarankan untuk mengganti password setelah login.\n\n";
+            $message .= "🏢 *Tim Sinergia*";
+            
+            $success = $whatsappService->sendMessage($formattedPhone, $message);
+            
+            if ($success) {
+                Log::info("Password reset sent to WhatsApp for user: {$user->employee_code}");
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Password baru telah dikirim ke WhatsApp Anda. Silakan cek pesan masuk.'
+                ]);
+            } else {
+                // Rollback password change if WhatsApp sending failed
+                $user->password = null;
+                $user->save();
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal mengirim pesan WhatsApp. Silakan coba lagi atau hubungi admin.'
+                ], 500);
+            }
             
         } catch (\Exception $e) {
-            Log::error("Failed to send WhatsApp message: " . $e->getMessage());
+            Log::error('Failed to send WhatsApp message: ' . $e->getMessage());
+            
+            // Rollback password change if exception occurred
+            $user->password = null;
+            $user->save();
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi admin.'
+            ], 500);
         }
     }
 

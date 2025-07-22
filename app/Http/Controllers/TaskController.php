@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -62,7 +63,6 @@ class TaskController extends Controller
             'priority' => 'required|in:low,medium,high',
             'task_type' => 'required|in:routine,incidental',
             'assigned_date' => 'required|date|after_or_equal:today',
-            'category' => 'nullable|string',
             'estimated_time' => 'nullable|numeric|min:0.5|max:100'
         ]);
 
@@ -72,21 +72,45 @@ class TaskController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'priority' => $request->priority,
-            'task_type' => $request->task_type,
-            'assigned_date' => $request->assigned_date,
-            'category' => $request->category,
+            'task_type' => $request->task_type, // Will always be 'incidental' from form
+            'assigned_date' => $request->assigned_date, // Will always be today from form
             'estimated_time' => $request->estimated_time,
             'is_self_assigned' => true,
-            // Task insidental butuh approval, task routine langsung approved
-            'approval_status' => $request->task_type === 'incidental' ? 'pending' : 'approved',
-            'status' => $request->task_type === 'incidental' ? 'assigned' : 'assigned'
+            'status' => 'assigned'
         ]);
+
+        // Send WhatsApp notification to supervisor
+        $whatsappService = new WhatsAppService();
+        $supervisorPhone = $whatsappService->getSupervisorPhone();
+        if ($supervisorPhone) {
+            $formattedPhone = $whatsappService->formatPhoneNumber($supervisorPhone);
+            if ($formattedPhone) {
+                $whatsappService->notifyTaskCreated($task->load('user'), $formattedPhone);
+            }
+        }
         
-        $message = $request->task_type === 'incidental' 
-            ? 'Tugas insidental berhasil dibuat! Menunggu persetujuan supervisor.' 
-            : 'Tugas berhasil dibuat!';
-            
-        return redirect()->route('user.tasks')->with('success', $message);
+        return redirect()->route('user.tasks')->with('success', 'Task insidental berhasil dibuat dan siap dikerjakan!');
+    }
+
+    /**
+     * Start working on a task
+     */
+    public function start(Request $request, Task $task)
+    {
+        if ($task->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        if ($task->status !== 'assigned') {
+            return response()->json(['error' => 'Task sudah dimulai atau selesai'], 400);
+        }
+
+        $task->update([
+            'status' => 'in_progress',
+            'started_at' => now()
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Task berhasil dimulai!']);
     }
 
     /**
@@ -126,5 +150,36 @@ class TaskController extends Controller
         }
 
         return view('user.task-detail', compact('task'));
+    }
+
+    /**
+     * Mark correction as completed
+     */
+    public function markCorrectionCompleted(Request $request, Task $task)
+    {
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (!$task->correction_needed || $task->correction_completed_at) {
+            return redirect()->back()->with('error', 'Perbaikan tidak diperlukan atau sudah selesai.');
+        }
+
+        $task->update([
+            'correction_completed_at' => now(),
+            'correction_needed' => false
+        ]);
+
+        // Send WhatsApp notification to supervisor
+        $whatsappService = new WhatsAppService();
+        $supervisorPhone = $whatsappService->getSupervisorPhone();
+        if ($supervisorPhone) {
+            $formattedPhone = $whatsappService->formatPhoneNumber($supervisorPhone);
+            if ($formattedPhone) {
+                $whatsappService->notifyCorrectionCompleted($task->load('user'), $formattedPhone);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Perbaikan telah ditandai selesai! Supervisor akan melihat bahwa perbaikan telah dilakukan.');
     }
 }

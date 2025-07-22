@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 @section('content')
 <div class="p-4 space-y-6">
     <!-- Formulir Laporan Isu & Permintaan -->
-    <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-6">
+    <div class="ounded-xl">
         <!-- Header dengan instruksi yang jelas -->
         <div class="text-center mb-6">
             <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -167,33 +167,6 @@ use Illuminate\Support\Facades\Storage;
                 </p>
             </div>
         </form>
-
-        <!-- Emergency Call Button -->
-        <div class="mt-6 p-4 bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-xl shadow-sm">
-            <div class="text-center mb-4">
-                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <i class="fas fa-phone text-white text-xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-orange-800">Butuh Bantuan Segera?</h3>
-                <p class="text-sm text-orange-700">Untuk situasi darurat yang memerlukan penanganan segera</p>
-            </div>
-            
-            <div class="space-y-3">
-                <button 
-                    onclick="callSupervisor()" 
-                    class="w-full bg-orange-600 text-white py-3 px-6 rounded-xl text-lg font-bold hover:bg-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300 transform hover:scale-105 transition-all duration-200 shadow-lg"
-                >
-                    <i class="fas fa-phone mr-2"></i>HUBUNGI SUPERVISOR
-                </button>
-                
-                <button 
-                    onclick="callSecurity()" 
-                    class="w-full bg-red-600 text-white py-3 px-6 rounded-xl text-lg font-bold hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transform hover:scale-105 transition-all duration-200 shadow-lg"
-                >
-                    <i class="fas fa-shield-alt mr-2"></i>HUBUNGI SECURITY
-                </button>
-            </div>
-        </div>
     </div>
 
     <!-- Bagian Riwayat Laporan -->
@@ -315,6 +288,22 @@ use Illuminate\Support\Facades\Storage;
             @endforelse
         </div>
     </div>
+
+	        <!-- Emergency Call Button -->
+        <div class="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl shadow-sm">
+            <div class="text-center mb-4">
+                <h3 class="text-2xl font-bold text-green-800">Butuh Bantuan Segera?</h3>
+            </div>
+            
+            <div class="space-y-3 grid place-items-center">
+                <a 
+                    href="wa.me/" 
+                    class="w-full  bg-green-500 text-white py-3 px-6 rounded-xl text-lg font-bold hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 transform hover:scale-105 transition-all duration-200 shadow-lg text-center"
+                >
+                    <i class="fab fa-whatsapp mr-2"></i>HUBUNGI SUPERVISOR
+                </a>
+            </div>
+        </div>
 </div>
 
 <style>
@@ -370,22 +359,19 @@ function removeFile() {
     filePreview.classList.add('hidden');
 }
 
-// Function to call supervisor
+// Function to call supervisor via WhatsApp
 function callSupervisor() {
     const supervisorPhone = '{{ config("emergency.supervisor_phone") }}';
+    // Remove + and any spaces from phone number for WhatsApp format
+    const whatsappPhone = supervisorPhone.replace(/[\+\s]/g, '');
     
-    if (confirm('Apakah Anda yakin ingin menghubungi supervisor untuk situasi darurat?')) {
-        // Untuk mobile device, gunakan tel: protocol
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
-            window.location.href = `tel:${supervisorPhone}`;
-        } else {
-            // Untuk desktop, tampilkan nomor dan copy ke clipboard
-            navigator.clipboard.writeText(supervisorPhone).then(function() {
-                alert(`Nomor supervisor: ${supervisorPhone}\n(Nomor telah disalin ke clipboard)`);
-            }).catch(function() {
-                alert(`Nomor supervisor: ${supervisorPhone}`);
-            });
-        }
+    // Create WhatsApp message
+    const message = encodeURIComponent('Halo, saya memerlukan bantuan untuk situasi darurat. Mohon segera direspon.');
+    const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${message}`;
+    
+    if (confirm('Apakah Anda yakin ingin menghubungi supervisor melalui WhatsApp untuk situasi darurat?')) {
+        // Open WhatsApp
+        window.open(whatsappUrl, '_blank');
     }
 }
 

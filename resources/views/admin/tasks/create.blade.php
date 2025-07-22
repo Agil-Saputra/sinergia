@@ -17,7 +17,7 @@
 </div>
 
 <div class="mt-8">
-    <div class="bg-white shadow rounded-lg">
+    <div class="bg-white shadow-lg rounded-2xl border-2 border-gray-100">
         <form method="POST" action="{{ route('admin.tasks.store') }}" class="space-y-6 p-6">
             @csrf
             
@@ -27,8 +27,8 @@
                     Pilih Karyawan <span class="text-red-500">*</span>
                 </label>
                 <select id="user_id" name="user_id" required 
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('user_id') border-red-300 @enderror">
-                    <option value="">Pilih karyawan...</option>
+                        class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('user_id') !border-red-300 @enderror">
+                                        <option value="">Pilih karyawan...</option>
                     @foreach($employees as $employee)
                         <option value="{{ $employee->id }}" {{ old('user_id') == $employee->id ? 'selected' : '' }}>
                             {{ $employee->name }} ({{ $employee->employee_code }})
@@ -47,7 +47,7 @@
                 </label>
                 <input type="text" id="title" name="title" required maxlength="255"
                        value="{{ old('title') }}"
-                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('title') border-red-300 @enderror"
+                       class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('title') !border-red-300 @enderror"
                        placeholder="Masukkan judul tugas...">
                 @error('title')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -60,7 +60,7 @@
                     Deskripsi Tugas <span class="text-red-500">*</span>
                 </label>
                 <textarea id="description" name="description" rows="4" required
-                          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('description') border-red-300 @enderror"
+                          class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('description') !border-red-300 @enderror"
                           placeholder="Jelaskan detail tugas yang harus dikerjakan...">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -75,7 +75,7 @@
                         Prioritas <span class="text-red-500">*</span>
                     </label>
                     <select id="priority" name="priority" required 
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('priority') border-red-300 @enderror">
+                            class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('priority') !border-red-300 @enderror">
                         <option value="">Pilih prioritas...</option>
                         <option value="low" {{ old('priority') === 'low' ? 'selected' : '' }}>
                             <span class="flex items-center">
@@ -107,7 +107,7 @@
                         Kategori
                     </label>
                     <select id="category" name="category" 
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('category') border-red-300 @enderror">
+                            class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('category') !border-red-300 @enderror">
                         <option value="">Pilih kategori...</option>
                         <option value="project" {{ old('category') === 'project' ? 'selected' : '' }}>Proyek</option>
                         <option value="maintenance" {{ old('category') === 'maintenance' ? 'selected' : '' }}>Maintenance</option>
@@ -134,7 +134,7 @@
                     <input type="date" id="due_date" name="due_date" 
                            value="{{ old('due_date') }}"
                            min="{{ date('Y-m-d') }}"
-                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('due_date') border-red-300 @enderror">
+                           class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('due_date') !border-red-300 @enderror">
                     @error('due_date')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -149,7 +149,7 @@
                     <input type="number" id="estimated_time" name="estimated_time" 
                            value="{{ old('estimated_time') }}"
                            min="0.5" max="200" step="0.5"
-                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('estimated_time') border-red-300 @enderror"
+                           class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('estimated_time') !border-red-300 @enderror"
                            placeholder="8">
                     @error('estimated_time')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -164,7 +164,7 @@
                     Catatan Tambahan
                 </label>
                 <textarea id="notes" name="notes" rows="3"
-                          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm @error('notes') border-red-300 @enderror"
+                          class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('notes') !border-red-300 @enderror"
                           placeholder="Catatan khusus atau instruksi tambahan...">{{ old('notes') }}</textarea>
                 @error('notes')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -172,14 +172,13 @@
             </div>
 
             <!-- Submit Buttons -->
-            <div class="flex justify-end space-x-3 pt-4 border-t">
+            <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200">
                 <a href="{{ route('admin.tasks.index') }}" 
-                   class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                   class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg">
                     Batal
                 </a>
                 <button type="submit" 
-                        class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    <i class="fas fa-save mr-2"></i>
+                        class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg">
                     Buat Tugas
                 </button>
             </div>
@@ -187,24 +186,4 @@
     </div>
 </div>
 
-<!-- Help Information -->
-<div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-    <div class="flex">
-        <div class="flex-shrink-0">
-            <i class="fas fa-info-circle text-blue-400"></i>
-        </div>
-        <div class="ml-3">
-            <h3 class="text-sm font-medium text-blue-800">Tips Membuat Tugas</h3>
-            <div class="mt-2 text-sm text-blue-700">
-                <ul class="list-disc list-inside space-y-1">
-                    <li>Berikan judul yang jelas dan deskriptif</li>
-                    <li>Sertakan detail lengkap dalam deskripsi tugas</li>
-                    <li>Pilih prioritas sesuai urgency tugas</li>
-                    <li>Tentukan estimasi waktu untuk membantu perencanaan</li>
-                    <li>Gunakan catatan untuk instruksi khusus</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EmergencyReport;
+use App\Services\WhatsAppService;
 
 class EmergencyReportController extends Controller
 {
@@ -51,7 +52,8 @@ class EmergencyReportController extends Controller
                 $path = $file->storeAs('emergency-reports', $filename, 'public');
                 $attachments[] = $path;
             }
-            EmergencyReport::create([
+            
+            $report = EmergencyReport::create([
                 'user_id' => Auth::id(),
                 'title' => $validated['title'],
                 'description' => $validated['description'],
@@ -61,6 +63,16 @@ class EmergencyReportController extends Controller
                 'status' => 'pending',
                 'reported_at' => now(),
             ]);
+
+            // Send WhatsApp notification to supervisor
+            $whatsappService = new WhatsAppService();
+            $supervisorPhone = $whatsappService->getSupervisorPhone();
+            if ($supervisorPhone) {
+                $formattedPhone = $whatsappService->formatPhoneNumber($supervisorPhone);
+                if ($formattedPhone) {
+                    $whatsappService->notifyEmergencyReport($report->load('user'), $formattedPhone);
+                }
+            }
 
             return redirect()->route('user.emergency-reports')
                 ->with('success', 'Emergency report submitted successfully! We will review it shortly.');

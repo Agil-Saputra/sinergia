@@ -11,11 +11,11 @@
 </div>
 
 <!-- Filters -->
-<div class="mt-8 bg-white shadow rounded-lg p-6">
-    <form method="GET" action="{{ route('admin.emergency-reports.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="mt-8 bg-white shadow-lg rounded-2xl border-2 border-gray-100">
+    <form method="GET" action="{{ route('admin.emergency-reports.index') }}" class="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
         <div>
-            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-            <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+            <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <select id="status" name="status" class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
                 <option value="">Semua Status</option>
                 <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Tertunda</option>
                 <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Sedang Proses</option>
@@ -23,8 +23,8 @@
             </select>
         </div>
         <div>
-            <label for="urgency" class="block text-sm font-medium text-gray-700">Urgensi</label>
-            <select id="urgency" name="urgency" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+            <label for="urgency" class="block text-sm font-medium text-gray-700 mb-2">Urgensi</label>
+            <select id="urgency" name="urgency" class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
                 <option value="">Semua Urgensi</option>
                 <option value="low" {{ request('urgency') == 'low' ? 'selected' : '' }}>Rendah</option>
                 <option value="medium" {{ request('urgency') == 'medium' ? 'selected' : '' }}>Sedang</option>
@@ -33,8 +33,8 @@
             </select>
         </div>
         <div>
-            <label for="type" class="block text-sm font-medium text-gray-700">Tipe</label>
-            <select id="type" name="type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+            <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Tipe</label>
+            <select id="type" name="type" class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
                 <option value="">Semua Tipe</option>
                 <option value="maintenance" {{ request('type') == 'maintenance' ? 'selected' : '' }}>Maintenance</option>
                 <option value="safety" {{ request('type') == 'safety' ? 'selected' : '' }}>Keselamatan</option>
@@ -44,8 +44,7 @@
             </select>
         </div>
         <div class="flex items-end">
-            <button type="submit" class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                <i class="fas fa-search mr-2"></i>
+            <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium py-4 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg">
                 Filter
             </button>
         </div>
@@ -220,17 +219,18 @@
 <!-- Status Update Modal -->
 <div id="statusModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
     <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg w-full max-w-md">
+        <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border-2 border-gray-100">
             <form id="statusForm" method="POST">
                 @csrf
                 @method('PUT')
-                <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Perbarui Status</h3>
-                    
+                <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-2xl px-6 py-4 border-b">
+                    <h3 class="text-xl font-semibold text-white">Perbarui Status</h3>
+                </div>
+                <div class="p-6 space-y-6">
                     <!-- Status -->
-                    <div class="mb-4">
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select name="status" id="status_select" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        <select name="status" id="status_select" class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
                             <option value="pending">Tertunda</option>
                             <option value="in_progress">Sedang Proses</option>
                             <option value="resolved">Diselesaikan</option>
@@ -238,23 +238,23 @@
                     </div>
 
                     <!-- Admin Notes -->
-                    <div class="mb-4">
+                    <div>
                         <label for="admin_notes" class="block text-sm font-medium text-gray-700 mb-2">
                             Catatan Admin
                         </label>
                         <textarea id="admin_notes" name="admin_notes" rows="4"
-                                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                  class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200"
                                   placeholder="Tambahkan catatan tentang penyelesaian atau progress..."></textarea>
                     </div>
                 </div>
 
-                <div class="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end space-x-2">
+                <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex justify-end space-x-3 border-t border-gray-200">
                     <button type="button" onclick="closeStatusModal()"
-                            class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300">
+                            class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg">
                         Batal
                     </button>
                     <button type="submit"
-                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                            class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg">
                         Perbarui Status
                     </button>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
 use App\Models\User;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,15 +13,16 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Task::with(['user', 'feedbackBy', 'approvedBy']);
+        $query = Task::with(['user', 'feedbackBy']);
         
-        // Filter berdasarkan approval status untuk task insidental
-        if ($request->has('approval') && $request->approval !== 'all') {
-            if ($request->approval === 'pending_approval') {
-                $query->where('task_type', 'incidental')
-                      ->where('approval_status', 'pending');
-            } elseif ($request->approval === 'employee_created') {
+        // Filter berdasarkan employee created
+        if ($request->has('filter') && $request->filter !== 'all') {
+            if ($request->filter === 'employee_created') {
                 $query->where('is_self_assigned', true);
+            } elseif ($request->filter === 'needs_correction') {
+                // Filter untuk task yang memerlukan perbaikan
+                $query->where('feedback_type', 'needs_improvement')
+                      ->where('correction_needed', true);
             }
         }
         
@@ -53,7 +55,7 @@ class TaskController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
-        Task::create([
+        $task = Task::create([
             'title' => $request->title,
             'description' => $request->description,
             'user_id' => $request->user_id,
@@ -61,15 +63,22 @@ class TaskController extends Controller
             'priority' => $request->priority,
             'category' => $request->category,
             'task_type' => 'routine', // Admin created tasks are routine
-            'approval_status' => 'approved', // Admin tasks auto-approved
-            'approved_by' => Auth::id(),
-            'approved_at' => now(),
             'estimated_time' => $request->estimated_time,
             'due_date' => $request->due_date,
             'notes' => $request->notes,
             'assigned_date' => now()->format('Y-m-d'),
             'status' => 'assigned'
         ]);
+
+        // Send WhatsApp notification to assigned employee
+        $whatsappService = new WhatsAppService();
+        $employee = User::find($request->user_id);
+        if ($employee && $employee->phone_number) {
+            $formattedPhone = $whatsappService->formatPhoneNumber($employee->phone_number);
+            if ($formattedPhone) {
+                $whatsappService->notifyTaskAssigned($task->load(['assignedBy', 'user']), $formattedPhone);
+            }
+        }
 
         return redirect()->route('admin.tasks.index')->with('success', 'Task berhasil dibuat dan ditugaskan!');
     }
@@ -123,47 +132,6 @@ class TaskController extends Controller
         return redirect()->route('admin.tasks.index')->with('success', 'Task berhasil dihapus!');
     }
 
-    /**
-     * Approve task insidental
-     */
-    public function approve(Request $request, Task $task)
-    {
-        if ($task->task_type !== 'incidental' || $task->approval_status !== 'pending') {
-            return response()->json(['error' => 'Task tidak memerlukan persetujuan'], 400);
-        }
-
-        $task->update([
-            'approval_status' => 'approved',
-            'approved_by' => Auth::id(),
-            'approved_at' => now()
-        ]);
-
-        return response()->json(['success' => 'Task berhasil disetujui']);
-    }
-
-    /**
-     * Reject task insidental
-     */
-    public function reject(Request $request, Task $task)
-    {
-        $request->validate([
-            'rejection_reason' => 'required|string|max:500'
-        ]);
-
-        if ($task->task_type !== 'incidental' || $task->approval_status !== 'pending') {
-            return response()->json(['error' => 'Task tidak memerlukan persetujuan'], 400);
-        }
-
-        $task->update([
-            'approval_status' => 'rejected',
-            'approved_by' => Auth::id(),
-            'approved_at' => now(),
-            'rejection_reason' => $request->rejection_reason
-        ]);
-
-        return response()->json(['success' => 'Task berhasil ditolak']);
-    }
-
     public function giveFeedback(Request $request, Task $task)
     {
         $request->validate([
@@ -171,13 +139,38 @@ class TaskController extends Controller
             'admin_feedback' => 'nullable|string|max:1000'
         ]);
 
-        $task->update([
+        $updateData = [
             'feedback_type' => $request->feedback_type,
             'admin_feedback' => $request->admin_feedback,
             'feedback_by' => Auth::id(),
             'feedback_at' => now()
-        ]);
+        ];
 
-        return redirect()->back()->with('success', 'Feedback berhasil diberikan!');
+        // If feedback is needs_improvement, mark that correction is needed
+        if ($request->feedback_type === 'needs_improvement') {
+            $updateData['correction_needed'] = true;
+            $updateData['correction_completed_at'] = null; // Reset if previously completed
+        } else {
+            $updateData['correction_needed'] = false;
+            $updateData['correction_completed_at'] = null;
+        }
+
+        $task->update($updateData);
+
+        // Send WhatsApp notification to employee
+        $whatsappService = new WhatsAppService();
+        $employee = $task->user;
+        if ($employee && $employee->phone_number) {
+            $formattedPhone = $whatsappService->formatPhoneNumber($employee->phone_number);
+            if ($formattedPhone) {
+                $whatsappService->notifyFeedbackGiven($task, $formattedPhone);
+            }
+        }
+
+        $message = $request->feedback_type === 'needs_improvement' 
+            ? 'Feedback berhasil diberikan! Karyawan akan melihat bahwa perbaikan diperlukan.'
+            : 'Feedback berhasil diberikan!';
+
+        return redirect()->back()->with('success', $message);
     }
 }

@@ -17,16 +17,16 @@
 </div>
 
 <div class="max-w-2xl">
-    <form method="POST" action="{{ route('admin.users.store') }}" class="bg-white shadow rounded-lg">
+    <form method="POST" action="{{ route('admin.users.store') }}" class="bg-white shadow-lg rounded-2xl border-2 border-gray-100">
         @csrf
         <div class="px-6 py-8 space-y-6">
                         <!-- Name -->
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
                     Nama Lengkap <span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm @error('name') border-red-300 @enderror">
+                       class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('name') !border-red-300 @enderror">
                 @error('name')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -34,11 +34,11 @@
 
             <!-- Email -->
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
                     Alamat Email <span class="text-red-500">*</span>
                 </label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm @error('email') border-red-300 @enderror">
+                       class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('email') !border-red-300 @enderror">
                 @error('email')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -46,19 +46,36 @@
 
             <!-- Employee Code -->
             <div>
-                <label for="employee_code" class="block text-sm font-medium text-gray-700">
+                <label for="employee_code" class="block text-sm font-medium text-gray-700 mb-2">
                     Kode Karyawan <span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="employee_code" id="employee_code" value="{{ old('employee_code') }}" required
-                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm @error('employee_code') border-red-300 @enderror"
+                       class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('employee_code') !border-red-300 @enderror">
+                @error('employee_code')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+                <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-2">
+                    Nomor Telepon
+                </label>
+                <input type="tel" name="phone_number" id="phone_number" value="{{ old('phone_number') }}"
+                       class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('phone_number') !border-red-300 @enderror"
+                       placeholder="08xxxxxxxxxx">
+                @error('phone_number')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
 
             <!-- Role -->
             <div>
-                <label for="role" class="block text-sm font-medium text-gray-700">
+                <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
                     Role <span class="text-red-500">*</span>
                 </label>
                 <select name="role" id="role" required
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm @error('role') border-red-300 @enderror">
+                        class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('role') !border-red-300 @enderror">
                     <option value="">Pilih role</option>
                     <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>Karyawan</option>
                     <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Administrator</option>
@@ -70,11 +87,11 @@
 
             <!-- Password -->
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
                     Password <span class="text-red-500">*</span>
                 </label>
                 <input type="password" name="password" id="password" required
-                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm @error('password') border-red-300 @enderror">
+                       class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200 @error('password') !border-red-300 @enderror">
                 @error('password')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -83,22 +100,21 @@
 
             <!-- Confirm Password -->
             <div>
-                <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
+                <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
                     Konfirmasi Password <span class="text-red-500">*</span>
                 </label>
                 <input type="password" name="password_confirmation" id="password_confirmation" required
-                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                       class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
             </div>
         </div>
 
-        <div class="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end space-x-3">
+        <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex justify-end space-x-3 border-t border-gray-200">
             <a href="{{ route('admin.users.index') }}" 
-               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+               class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg">
                 Batal
             </a>
             <button type="submit" 
-                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                <i class="fas fa-save mr-2"></i>
+                    class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg">
                 Buat Pengguna
             </button>
         </div>

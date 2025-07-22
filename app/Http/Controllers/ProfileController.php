@@ -39,13 +39,26 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'email' => 'sometimes|email|unique:users,email,' . Auth::id(),
+            'phone_number' => 'nullable|string|max:20',
         ]);
 
         $user = Auth::user();
         $user->name = $request->name;
-        $user->email = $request->email;
+        
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+        
+        if ($request->has('phone_number')) {
+            $user->phone_number = $request->phone_number;
+        }
+        
         $user->save();
+        
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Profile updated successfully!']);
+        }
         
         return redirect()->route('user.profile')->with('success', 'Profile updated successfully!');
     }
@@ -67,19 +80,43 @@ class ProfileController extends Controller
      */
     public function updatePassword(Request $request)
     {
-        $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|min:6|confirmed',
-        ]);
+        try {
+            $request->validate([
+                'current_password' => 'required',
+                'new_password' => 'required|min:6',
+                'new_password_confirmation' => 'required|same:new_password',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            throw $e;
+        }
 
         $user = Auth::user();
         
         if (!Hash::check($request->current_password, $user->password)) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['current_password' => ['Password lama tidak sesuai.']]
+                ], 422);
+            }
             return back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
 
         $user->password = Hash::make($request->new_password);
         $user->save();
+        
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Password berhasil diubah!'
+            ]);
+        }
         
         return redirect()->route('user.profile')->with('success', 'Password changed successfully!');
     }

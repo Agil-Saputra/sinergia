@@ -34,7 +34,6 @@
         <nav class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-3">
-                    <!-- Ganti dengan logo Anda -->
                     <img src="{{ asset('logo.png') }}" alt="logo sinergia" class="h-8 w-auto" onerror="this.style.display='none'">
                     <span class="text-xl font-semibold text-white">Sinergia</span>
                 </div>

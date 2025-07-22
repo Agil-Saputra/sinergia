@@ -29,8 +29,8 @@ class UserSeeder extends Seeder
             'name' => 'Budi Santoso',
             'employee_code' => 'SBY09876',
             'email' => null,
-            'phone_number' => '082345678901',
-            'password' => null, // No password initially
+            'phone_number' => '08153209513',
+            'password' => Hash::make('budi123'), // No password initially
             'role' => 'user',
         ]);
 

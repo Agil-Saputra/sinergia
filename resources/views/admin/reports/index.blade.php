@@ -1,203 +1,178 @@
 @extends('layouts.admin')
 
-@section('title', 'Laporan')
+@section('title', 'Export Data')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-2xl font-semibold text-gray-900">Dashboard Laporan</h1>
-    <p class="mt-2 text-sm text-gray-700">Akses laporan detail dan analitik untuk organisasi Anda.</p>
-</div>
+    <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-gray-900">Export Data</h1>
+        <p class="mt-2 text-sm text-gray-700">Download data dalam format Excel (XLSX) untuk analisis lebih lanjut.</p>
+    </div>
 
-<!-- Report Categories -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <!-- Task Reports -->
-    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-tasks text-blue-600 text-xl"></i>
+    <!-- Export Categories -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Task Data Export -->
+        <div class="bg-white shadow-lg rounded-2xl border-2 border-gray-100 hover:shadow-xl transition-all duration-200">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-2xl px-6 py-4">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-tasks text-white text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-white">Data Tugas</h3>
+                        <p class="text-sm text-blue-100">Export semua data tugas karyawan</p>
                     </div>
                 </div>
-                <div class="ml-4 flex-1">
-                    <h3 class="text-lg font-medium text-gray-900">Laporan Tugas</h3>
-                    <p class="text-sm text-gray-600">Lihat tingkat penyelesaian tugas, metrik kinerja, dan analitik produktivitas.</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-3 text-sm text-gray-600 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        <span>Status tugas dan progress</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-user text-blue-500 mr-2"></i>
+                        <span>Data karyawan yang bertanggung jawab</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar text-purple-500 mr-2"></i>
+                        <span>Tanggal penugasan dan penyelesaian</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-star text-yellow-500 mr-2"></i>
+                        <span>Prioritas dan kategori tugas</span>
+                    </div>
+                </div>
+                <a href="{{ route('admin.export.tasks') }}"
+                    class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg inline-flex items-center justify-center">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Data Tugas
+                </a>
+            </div>
+        </div>
+
+        <!-- Users Data Export -->
+        <div class="bg-white shadow-lg rounded-2xl border-2 border-gray-100 hover:shadow-xl transition-all duration-200">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-t-2xl px-6 py-4">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-users text-white text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-white">Data Karyawan</h3>
+                        <p class="text-sm text-green-100">Export informasi lengkap karyawan</p>
+                    </div>
                 </div>
             </div>
-            <div class="mt-6">
-                <a href="{{ route('admin.reports.tasks') }}" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors inline-flex items-center justify-center">
-                    <i class="fas fa-chart-bar mr-2"></i>
-                    Lihat Laporan Tugas
+            <div class="p-6">
+                <div class="space-y-3 text-sm text-gray-600 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-id-card text-green-500 mr-2"></i>
+                        <span>Data pribadi dan kontak</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-briefcase text-blue-500 mr-2"></i>
+                        <span>Informasi jabatan dan role</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-code text-purple-500 mr-2"></i>
+                        <span>Kode karyawan dan ID</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar-plus text-yellow-500 mr-2"></i>
+                        <span>Status akun dan tanggal bergabung</span>
+                    </div>
+                </div>
+                <a href="{{ route('admin.export.users') }}"
+                    class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg inline-flex items-center justify-center">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Data Karyawan
+                </a>
+            </div>
+        </div>
+
+        <!-- Attendance Data Export -->
+        <div class="bg-white shadow-lg rounded-2xl border-2 border-gray-100 hover:shadow-xl transition-all duration-200">
+            <div class="bg-gradient-to-r from-purple-600 to-purple-700 rounded-t-2xl px-6 py-4">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-clock text-white text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-white">Data Absensi</h3>
+                        <p class="text-sm text-purple-100">Export riwayat kehadiran karyawan</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="space-y-3 text-sm text-gray-600 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-sign-in-alt text-green-500 mr-2"></i>
+                        <span>Waktu check-in dan check-out</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-stopwatch text-blue-500 mr-2"></i>
+                        <span>Total jam kerja harian</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt text-purple-500 mr-2"></i>
+                        <span>Lokasi dan catatan absensi</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar-check text-yellow-500 mr-2"></i>
+                        <span>Status kehadiran dan keterlambatan</span>
+                    </div>
+                </div>
+                <a href="{{ route('admin.export.attendance') }}"
+                    class="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg inline-flex items-center justify-center">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Data Absensi
+                </a>
+            </div>
+        </div>
+
+        <!-- Emergency Reports Data Export -->
+        <div class="bg-white shadow-lg rounded-2xl border-2 border-gray-100 hover:shadow-xl transition-all duration-200">
+            <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-2xl px-6 py-4">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-white">Laporan Darurat</h3>
+                        <p class="text-sm text-red-100">Export data insiden dan laporan darurat</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="space-y-3 text-sm text-gray-600 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                        <span>Jenis dan tingkat urgensi insiden</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-user-shield text-blue-500 mr-2"></i>
+                        <span>Pelapor dan penanganan</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock text-purple-500 mr-2"></i>
+                        <span>Waktu laporan dan penyelesaian</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check-double text-green-500 mr-2"></i>
+                        <span>Status dan catatan admin</span>
+                    </div>
+                </div>
+                <a href="{{ route('admin.export.emergency') }}"
+                    class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium py-3 px-6 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-lg inline-flex items-center justify-center">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Laporan Darurat
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Attendance Reports -->
-    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-clock text-green-600 text-xl"></i>
-                    </div>
-                </div>
-                <div class="ml-4 flex-1">
-                    <h3 class="text-lg font-medium text-gray-900">Laporan Absensi</h3>
-                    <p class="text-sm text-gray-600">Monitor pola absensi karyawan, jam kerja, dan ketepatan waktu.</p>
-                </div>
-            </div>
-            <div class="mt-6">
-                <a href="{{ route('admin.reports.attendance') }}" class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors inline-flex items-center justify-center">
-                    <i class="fas fa-calendar-check mr-2"></i>
-                    Lihat Laporan Absensi
-                </a>
-            </div>
-        </div>
+
     </div>
 
-    <!-- Emergency Reports -->
-    <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="p-6">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
-                    </div>
-                </div>
-                <div class="ml-4 flex-1">
-                    <h3 class="text-lg font-medium text-gray-900">Laporan Darurat</h3>
-                    <p class="text-sm text-gray-600">Analisis insiden darurat, waktu respons, dan pola penyelesaian.</p>
-                </div>
-            </div>
-            <div class="mt-6">
-                <a href="{{ route('admin.reports.emergency') }}" class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors inline-flex items-center justify-center">
-                    <i class="fas fa-clipboard-list mr-2"></i>
-                    Lihat Laporan Darurat
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Quick Stats Overview -->
-<div class="mt-12">
-    <h2 class="text-lg font-medium text-gray-900 mb-6">Ikhtisar Cepat</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check-circle text-blue-600"></i>
-                        </div>
-                    </div>
-                    <div class="ml-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Tugas Selesai Hari Ini</dt>
-                            <dd class="text-lg font-medium text-gray-900">{{ \App\Models\Task::whereDate('completed_at', today())->count() }}</dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user-check text-green-600"></i>
-                        </div>
-                    </div>
-                    <div class="ml-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Karyawan Hadir</dt>
-                            <dd class="text-lg font-medium text-gray-900">{{ \App\Models\Attendance::whereDate('date', today())->distinct('user_id')->count() }}</dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-exclamation-circle text-yellow-600"></i>
-                        </div>
-                    </div>
-                    <div class="ml-5 w-0 flex-1">
-                        <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Darurat Tertunda</dt>
-                            <dd class="text-lg font-medium text-gray-900">{{ \App\Models\EmergencyReport::where('status', 'pending')->count() }}</dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-percentage text-purple-600"></i>
-                        </div>
-                    </div>
-                    <div class="ml-5 w-0 flex-1">
-                                                <dl>
-                            <dt class="text-sm font-medium text-gray-500 truncate">Tingkat Penyelesaian</dt>
-                            <dd class="text-lg font-medium text-gray-900">
-                                @php
-                                    $totalTasks = \App\Models\Task::whereDate('assigned_date', today())->count();
-                                    $rate = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
-                                @endphp
-                                {{ $rate }}%
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Activity -->
-<div class="mt-12">
-    <h2 class="text-lg font-medium text-gray-900 mb-6">Aktivitas Terbaru</h2>
-    <div class="bg-white shadow overflow-hidden sm:rounded-md">
-        <ul class="divide-y divide-gray-200">
-            @php
-                $recentTasks = \App\Models\Task::with('user')->where('status', 'completed')->latest('completed_at')->take(5)->get();
-            @endphp
-            @forelse($recentTasks as $task)
-                <li class="px-6 py-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                                    <i class="fas fa-check text-green-600 text-sm"></i>
-                                </div>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-900">{{ $task->title }}</p>
-                                <p class="text-sm text-gray-500">Diselesaikan oleh {{ $task->user->name }}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-500">
-                            <i class="fas fa-clock mr-1"></i>
-                            {{ $task->completed_at->diffForHumans() }}
-                        </div>
-                    </div>
-                </li>
-            @empty
-                <li class="px-6 py-4 text-center text-gray-500">
-                    Tidak ada tugas yang baru diselesaikan
-                </li>
-            @endforelse
-        </ul>
-    </div>
-</div>
 @endsection

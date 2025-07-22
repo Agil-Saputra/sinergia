@@ -16,10 +16,8 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::post('/check-password-required', [AuthController::class, 'checkPasswordRequired']);
 
-// Forgot Password Routes
-Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+// Forgot Password Routes (AJAX)
 Route::post('/forgot-password', [AuthController::class, 'sendPasswordViaWhatsApp'])->name('forgot-password.send');
 
 // Admin Routes
@@ -44,19 +42,18 @@ Route::middleware(['role:admin'])->group(function () {
     Route::put('/admin/tasks/{task}', [\App\Http\Controllers\Admin\TaskController::class, 'update'])->name('admin.tasks.update');
     Route::delete('/admin/tasks/{task}', [\App\Http\Controllers\Admin\TaskController::class, 'destroy'])->name('admin.tasks.destroy');
     Route::post('/admin/tasks/{task}/feedback', [\App\Http\Controllers\Admin\TaskController::class, 'giveFeedback'])->name('admin.tasks.feedback');
-    Route::post('/admin/tasks/{task}/approve', [\App\Http\Controllers\Admin\TaskController::class, 'approve'])->name('admin.tasks.approve');
-    Route::post('/admin/tasks/{task}/reject', [\App\Http\Controllers\Admin\TaskController::class, 'reject'])->name('admin.tasks.reject');
     
     // Attendance Management
     Route::get('/admin/attendance', [\App\Http\Controllers\Admin\AttendanceController::class, 'index'])->name('admin.attendance.index');
     Route::get('/admin/attendance/{attendance}', [\App\Http\Controllers\Admin\AttendanceController::class, 'show'])->name('admin.attendance.show');
     Route::get('/admin/attendance/stats', [\App\Http\Controllers\Admin\AttendanceController::class, 'stats'])->name('admin.attendance.stats');
     
-    // Reports
-    Route::get('/admin/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.reports.index');
-    Route::get('/admin/reports/tasks', [\App\Http\Controllers\Admin\ReportController::class, 'tasks'])->name('admin.reports.tasks');
-    Route::get('/admin/reports/attendance', [\App\Http\Controllers\Admin\ReportController::class, 'attendance'])->name('admin.reports.attendance');
-    Route::get('/admin/reports/emergency', [\App\Http\Controllers\Admin\ReportController::class, 'emergencyReports'])->name('admin.reports.emergency');
+    // Export Data
+    Route::get('/admin/export', [\App\Http\Controllers\Admin\ExportController::class, 'index'])->name('admin.export.index');
+    Route::get('/admin/export/tasks', [\App\Http\Controllers\Admin\ExportController::class, 'tasks'])->name('admin.export.tasks');
+    Route::get('/admin/export/users', [\App\Http\Controllers\Admin\ExportController::class, 'users'])->name('admin.export.users');
+    Route::get('/admin/export/attendance', [\App\Http\Controllers\Admin\ExportController::class, 'attendance'])->name('admin.export.attendance');
+    Route::get('/admin/export/emergency', [\App\Http\Controllers\Admin\ExportController::class, 'emergencyReports'])->name('admin.export.emergency');
     
     // Emergency Reports Management
     Route::get('/admin/emergency-reports', [\App\Http\Controllers\Admin\EmergencyReportController::class, 'index'])->name('admin.emergency-reports.index');
@@ -88,13 +85,16 @@ Route::middleware(['role:user'])->group(function () {
     Route::get('/user/tasks/create', [TaskController::class, 'create'])->name('user.tasks.create');
     Route::post('/user/tasks', [TaskController::class, 'store'])->name('user.tasks.store');
     Route::get('/user/tasks/{task}', [TaskController::class, 'show'])->name('user.tasks.show');
+    Route::post('/user/tasks/{task}/start', [TaskController::class, 'start'])->name('user.tasks.start');
     Route::patch('/user/tasks/{task}/status', [TaskController::class, 'updateStatus'])->name('user.tasks.update-status');
     Route::post('/user/tasks/{task}/complete', [TaskController::class, 'complete'])->name('user.tasks.complete');
+    Route::post('/user/tasks/{task}/correction-completed', [TaskController::class, 'markCorrectionCompleted'])->name('user.tasks.correction-completed');
     
     // Profile
     Route::get('/user/profile', [ProfileController::class, 'index'])->name('user.profile');
     Route::get('/user/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
-    Route::put('/user/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+    Route::post('/user/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+    Route::post('/user/password/update', [ProfileController::class, 'updatePassword'])->name('user.password.update');
     Route::get('/user/profile/change-password', [ProfileController::class, 'changePassword'])->name('user.profile.change-password');
     Route::put('/user/profile/change-password', [ProfileController::class, 'updatePassword'])->name('user.profile.update-password');
 });

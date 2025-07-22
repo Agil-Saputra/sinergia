@@ -113,7 +113,9 @@
         </div>
     @else
         <div class="text-center py-12">
-            <div class="text-6xl text-gray-400 mb-4">📋</div>
+            <div class="text-6xl text-gray-400 mb-4">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
             <h3 class="text-xl font-medium text-gray-700 mb-2">Belum Ada Riwayat Absensi</h3>
             <p class="text-gray-500 mb-6">Mulai lakukan absensi untuk melihat riwayat Anda di sini.</p>
             <a href="{{ route('attendance.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
