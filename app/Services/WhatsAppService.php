@@ -205,6 +205,57 @@ class WhatsAppService
     }
 
     /**
+     * Notify user when admin updates emergency report status
+     */
+    public function notifyEmergencyStatusUpdate($report, $userPhone, $oldStatus = null)
+    {
+        $statusEmoji = [
+            'pending' => '⏳',
+            'under_review' => '👀',
+            'resolved' => '✅',
+            'closed' => '🔒'
+        ];
+
+        $statusText = [
+            'pending' => 'Tertunda',
+            'under_review' => 'Sedang Ditinjau',
+            'resolved' => 'Diselesaikan',
+            'closed' => 'Ditutup'
+        ];
+
+        $emoji = $statusEmoji[$report->status] ?? '📝';
+        $status = $statusText[$report->status] ?? 'Tidak diketahui';
+
+        $message = "{$emoji} *UPDATE LAPORAN DARURAT*\n\n";
+        $message .= "📝 *Laporan:* {$report->title}\n";
+        $message .= "📊 *Status Baru:* {$status}\n";
+        
+        if ($oldStatus && $oldStatus !== $report->status) {
+            $oldStatusText = $statusText[$oldStatus] ?? $oldStatus;
+            $message .= "📋 *Status Sebelumnya:* {$oldStatusText}\n";
+        }
+        
+        $message .= "📅 *Diupdate:* " . now()->format('d/m/Y H:i') . "\n";
+        
+        if ($report->admin_notes) {
+            $message .= "\n💬 *Catatan Admin:*\n{$report->admin_notes}\n";
+        }
+        
+        // Add action message based on status
+        if ($report->status === 'under_review') {
+            $message .= "\n🔍 Laporan Anda sedang dalam proses peninjauan oleh tim kami.";
+        } elseif ($report->status === 'resolved') {
+            $message .= "\n✅ Laporan Anda telah diselesaikan. Terima kasih atas laporannya!";
+        } elseif ($report->status === 'closed') {
+            $message .= "\n🔒 Laporan ini telah ditutup. Jika ada pertanyaan lebih lanjut, silakan hubungi admin.";
+        }
+        
+        $message .= "\n\n🏢 *Tim Sinergia*";
+
+        return $this->sendMessage($userPhone, $message);
+    }
+
+    /**
      * Get supervisor phone number from config
      */
     public function getSupervisorPhone()

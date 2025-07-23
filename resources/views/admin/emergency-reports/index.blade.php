@@ -12,35 +12,25 @@
 
 <!-- Filters -->
 <div class="mt-8 bg-white shadow-lg rounded-2xl border-2 border-gray-100">
-    <form method="GET" action="{{ route('admin.emergency-reports.index') }}" class="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+    <form method="GET" action="{{ route('admin.emergency-reports.index') }}" class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
             <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
             <select id="status" name="status" class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
                 <option value="">Semua Status</option>
                 <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Tertunda</option>
-                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Sedang Proses</option>
+                <option value="under_review" {{ request('status') == 'under_review' ? 'selected' : '' }}>Sedang Ditinjau</option>
                 <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Diselesaikan</option>
+                <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Ditutup</option>
             </select>
         </div>
         <div>
-            <label for="urgency" class="block text-sm font-medium text-gray-700 mb-2">Urgensi</label>
-            <select id="urgency" name="urgency" class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
-                <option value="">Semua Urgensi</option>
-                <option value="low" {{ request('urgency') == 'low' ? 'selected' : '' }}>Rendah</option>
-                <option value="medium" {{ request('urgency') == 'medium' ? 'selected' : '' }}>Sedang</option>
-                <option value="high" {{ request('urgency') == 'high' ? 'selected' : '' }}>Tinggi</option>
-                <option value="critical" {{ request('urgency') == 'critical' ? 'selected' : '' }}>Kritis</option>
-            </select>
-        </div>
-        <div>
-            <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Tipe</label>
-            <select id="type" name="type" class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
-                <option value="">Semua Tipe</option>
-                <option value="maintenance" {{ request('type') == 'maintenance' ? 'selected' : '' }}>Maintenance</option>
-                <option value="safety" {{ request('type') == 'safety' ? 'selected' : '' }}>Keselamatan</option>
-                <option value="security" {{ request('type') == 'security' ? 'selected' : '' }}>Keamanan</option>
-                <option value="health" {{ request('type') == 'health' ? 'selected' : '' }}>Kesehatan</option>
-                <option value="other" {{ request('type') == 'other' ? 'selected' : '' }}>Lainnya</option>
+            <label for="priority" class="block text-sm font-medium text-gray-700 mb-2">Prioritas</label>
+            <select id="priority" name="priority" class="block w-full px-4 py-4 border-2 border-gray-200 rounded-2xl shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:ring-2 focus:ring-opacity-20 transition-all duration-200">
+                <option value="">Semua Prioritas</option>
+                <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Rendah</option>
+                <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Sedang</option>
+                <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>Tinggi</option>
+                <option value="critical" {{ request('priority') == 'critical' ? 'selected' : '' }}>Kritis</option>
             </select>
         </div>
         <div class="flex items-end">
