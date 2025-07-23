@@ -356,41 +356,54 @@
 
     <!-- Feedback Modal -->
     <div id="feedbackModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div class="mt-3">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Berikan Feedback</h3>
+        <div class="relative top-20 mx-auto p-6 border w-96 shadow-lg rounded-2xl bg-white">
+            <div class="mt-2">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Berikan Feedback</h3>
                 <form id="feedbackForm" method="POST">
                     @csrf
-                    <div class="mb-4">
-                        <label for="feedback_type" class="block text-sm font-medium text-gray-700 mb-2">
-                            Jenis Feedback
-                        </label>
-                        <select id="feedback_type" name="feedback_type" required
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                            <option value="">Pilih jenis feedback...</option>
-                            <option value="excellent">⭐ Sempurna</option>
-                            <option value="good">👍 Bagus</option>
-                            <option value="needs_improvement">📝 Perlu Perbaikan</option>
-                        </select>
+                    <div class="space-y-4">
+                        <!-- Feedback Type -->
+                        <div class="group">
+                            <label for="feedback_type" class="block text-sm font-semibold text-gray-800 mb-2">
+                                Jenis Feedback <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <select id="feedback_type" name="feedback_type" required
+                                    class="block w-full px-3 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-300 appearance-none cursor-pointer">
+                                    <option value="">Pilih jenis feedback...</option>
+                                    <option value="excellent">⭐ Sempurna</option>
+                                    <option value="good">👍 Bagus</option>
+                                    <option value="needs_improvement">📝 Perlu Perbaikan</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Notes -->
+                        <div class="group">
+                            <label for="admin_feedback" class="block text-sm font-semibold text-gray-800 mb-2">
+                                Catatan Feedback
+                            </label>
+                            <textarea id="admin_feedback" name="admin_feedback" rows="3"
+                                class="block w-full px-3 py-3 text-gray-900 bg-white border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-300"
+                                placeholder="Berikan feedback untuk tugas ini..."></textarea>
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label for="admin_feedback" class="block text-sm font-medium text-gray-700 mb-2">
-                            Catatan Feedback
-                        </label>
-                        <textarea id="admin_feedback" name="admin_feedback" rows="4"
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            placeholder="Berikan feedback untuk tugas ini..."></textarea>
-                    </div>
-
-                    <div class="flex justify-end space-x-3">
+                    <!-- Submit Buttons -->
+                    <div class="flex justify-end space-x-3 pt-6 mt-6 border-t border-gray-100">
                         <button type="button" onclick="closeFeedbackModal()"
-                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded">
+                            class="px-4 py-2 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-200">
                             Batal
                         </button>
                         <button type="submit"
-                            class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded">
-                            Simpan Feedback
+                            class="btn-primary px-6 py-2 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Kirim Feedback
                         </button>
                     </div>
                 </form>
